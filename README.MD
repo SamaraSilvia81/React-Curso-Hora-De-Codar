@@ -1,4 +1,4 @@
-![Logo animado azul neon futurista para tecnologia](https://user-images.githubusercontent.com/113690864/196211154-e78a5f34-7531-4f03-be8d-c2e7d1082f4f.gif)
+![Cópia de Learn English - Bad Blood](https://user-images.githubusercontent.com/100232025/196293177-083ee899-174b-42a6-b14f-7cb0fe9c6251.gif)
 # Curso Hora de Codar - React - Plataforma Youtube
 
 ![Badge em Desenvolvimento](http://img.shields.io/static/v1?label=STATUS&message=EM%20DESENVOLVIMENTO&color=36DBEC&style=for-the-badge)
