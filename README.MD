@@ -1,5 +1,5 @@
 ![Cópia de Learn English - Bad Blood](https://user-images.githubusercontent.com/100232025/196293177-083ee899-174b-42a6-b14f-7cb0fe9c6251.gif)
-# Curso Hora de Codar - React - Plataforma Youtube
+# Curso de React - Hora de Codar - Plataforma Youtube
 
 ![Badge em Desenvolvimento](http://img.shields.io/static/v1?label=STATUS&message=EM%20DESENVOLVIMENTO&color=36DBEC&style=for-the-badge)
 
