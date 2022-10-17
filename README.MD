@@ -8,12 +8,12 @@
 
 ## Conteúdo 
 ### Aulas do Curso
-- `Estudando HTML e CSS` - 2 ao 9
+- `Fragments` - 7
 ### Exercícios do Curso
   - NomeDoExercicio
 ### Desafios do Curso
   - AulaX - NomeDoProjeto
   
 ## Registro
-- `Aula 23` : 17/10 ✔️
+- `Aula 07` : 17/10 ✔️
 
