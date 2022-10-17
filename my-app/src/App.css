@@ -1,10 +1,11 @@
 .App {
   text-align: center;
-  display: flex;
-  padding-left: 15rem;
-  padding-top: 2rem;
 }
 
 .Pessoa{
   padding-right: 2rem;
+}
+
+.Fragment{
+  padding-top: 25rem;
 }

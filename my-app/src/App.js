@@ -2,9 +2,10 @@ import HelloWorld from './components/HelloWorld'
 import SayMyName from './components/SayMyName'
 import Pessoa from './components/Pessoa'
 import './App.css';
+import List from './components/List';
 
 function App() {
-
+ 
   const nome = "Joshua"
 
   return (
@@ -18,10 +19,13 @@ function App() {
         </div>
       <div>
         <HelloWorld/>
-        <SayMyName nome="Wanda"/>
+        <SayMyName nome = 'Wanda'/>
         <SayMyName nome={nome}/> 
+        <SayMyName nome="Samara"/>
       </div>
-    
+      <div>
+        <List/>
+      </div>
     </div>
   );
 }
