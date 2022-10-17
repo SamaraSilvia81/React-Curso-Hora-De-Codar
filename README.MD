@@ -8,9 +8,15 @@
 
 ## Conteúdo 
 ### Aulas do Curso
+- `Introdução` - 1
+- `Instalação` - 2
+- `JSX` - 3
+- `Components` - 4
+- `Props` - 5
+- `CSS Modules` - 6
 - `Fragments` - 7
 ### Exercícios do Curso
-  - NomeDoExercicio
+  - My-App
 ### Desafios do Curso
   - AulaX - NomeDoProjeto
   
