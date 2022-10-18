@@ -15,6 +15,7 @@
 - `Props` - 5
 - `CSS Modules` - 6
 - `Fragments` - 7
+- - `Avançando em Props` - 8
 ### Exercícios do Curso
   - My-App
 ### Desafios do Curso
