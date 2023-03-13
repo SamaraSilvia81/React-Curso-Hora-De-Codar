@@ -1,4 +1,4 @@
-import Frase from './Frase'
+import Frase from './frase/Frase'
 
 function HelloWorld() {
 
