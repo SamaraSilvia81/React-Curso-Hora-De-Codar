@@ -9,7 +9,12 @@ export function Condicional(){
         e.preventDefault()
         console.log('Testando email...')
         setUserEmail(email)
-        console.log(userEmail)
+        console.log(email)
+    }
+
+    const limparEmail = (e) => {
+        e.preventDefault()
+        setUserEmail('') // limpa o nosso email
     }
 
     return(
@@ -25,6 +30,14 @@ export function Condicional(){
                     type='submit' 
                     onClick={enviarEmail}>Enviar e-mail
                 </button>
+                {
+                    userEmail && (
+                        <div>
+                            <p>o e-mail do usuário é: {userEmail}</p>
+                            <button onClick ={limparEmail}>Limapr e-mail</button>
+                        </div>
+                    )
+                }
             </form>
         </div>
     )

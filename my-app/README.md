@@ -2,14 +2,202 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Utilizando React Fragments
+
+> Fragments é um recurso do react que permite a criação de um componente sem um elemento pai.
+
+- O propósito é descomplicar os nós do DOM;
+- A sintaxe é <> e </>, não há um nome para a tag;
+- Criamos no próprio JSX.
+
+- **Lista.js** 
+
+Criamos um componente "Lista" para exibirmos os dados que iremos criar.
+
+```js
+
+// Aplicando Conhecimentos de Fragments
+
+import Item from './Item'
+
+export function Lista (){
+    return (
+        <>
+            <h1>Minha Lista</h1>
+            <ul>
+                <Item marca="Ferrari" />
+                <Item marca="Fiat" />
+                <Item marca="Renault"/>
+                <Item marca="Chevrolet" />
+                <Item/>
+            </ul>
+        </>
+    )
+}
+
+```
+
+Como exigimos que o ano fosse um dado number, então tivemos que colocar {} para receber o dado. Normalmente, usaríamos uma string - " " - para colocar esse dado.
+
+- **Item.js**
+
+Criamos esse componente para criar a estrutura da nossa lista, com as suas devidas props e configurações de type, exigindo que a "marca" seja uma string e o "ano" um number. 
+
+Isso pois, o react, assim com o JS é fracamente tipado, então se quisermos fazer essas especificações precisaremos usar TypeScript ou o próprio "PropTypes".
+
+```js
+
+function Item (props){
+    return (
+        <>
+            <li>
+                {props.marca}
+            </li>
+        </>
+    )
+}
+
+export default Item
+
+```
+
+- **App.js**
+
+Lembre-se de importar o arquivo "Lista" no nosso app.js.
+
+```js
+
+import {Lista} from './components/fragments/Lista';
+import './App.css';
+
+function App() {
+
+  return (
+    <div className="App">
+        <h1>Estudando Fragments</h1>
+        <Lista/>
+    </div>
+  );
+}
+
+export default App;
+
+```
+
+## Avançando nas Props
+
+> Podemos definir tipos para as props, realizando uma espécie de validação.
+
+- Definimos em um objeto chamado `propTypes` no próprio componente;
+- E ainda há a possibilidade de `definir um valor padrão`.
+- Neste caso utilziaremos o objeto `defaultProps`.
+
+- **Lista.js** 
+
+Criamos um componente "Lista" para exibirmos os dados que iremos criar.
+
+```js
+
+// Aplicando Conhecimentos de Fragments e Tipagem de Props
+
+import Item from './Item'
+
+export function Lista (){
+    return (
+        <>
+            <h1>Minha Lista</h1>
+            <ul>
+                <Item marca="Ferrari" ano_lancamento = {1985}/>
+                <Item marca="Fiat" ano_lancamento = {1964}/>
+                <Item marca="Renault"/>
+                <Item marca="Chevrolet" ano_lancamento = {1922}/>
+                <Item/>
+            </ul>
+        </>
+    )
+}
+
+```
+
+Como queremos que na variável "ano_lancamento" seja passado um number, tivemos que colocar {}. Isso sempre ocorre e devo ser utilizado dessa maneira.
+
+- **Item.js**
+
+Criamos esse componente para criar a estrutura da nossa lista, com as suas devidas props e configurações de type, exigindo que a "marca" seja uma string e o "ano" um number. 
+
+Isso pois, o react, assim com o JS é fracamente tipado, então se quisermos fazer essas especificações precisaremos usar TypeScript ou o próprio "PropTypes".
+
+```js
+
+import PropTypes from "prop-types";
+
+function Item ({marca,ano_lancamento}){
+    return (
+        <>
+            <li>
+                {marca} - {ano_lancamento}
+            </li>
+        </>
+    )
+}
+
+Item.propTypes = {
+    marca: PropTypes.string,
+    ano_lancamento: PropTypes.number,
+}
+
+Item.defaultProps = {
+    marca: 'Faltou a  marca',
+    ano_lancamento:0
+}
+
+export default Item
+
+```
+
+- **Destruction**
+
+Perceba que fizemos um `destruction` na definição das props, chamando as variávies atributos diretamente, ao invés de serem intermediadas pelo termo padrão "props".
+
+- **propTypes**
+
+Além do que, quando chamamos esse propTypes, nota-se que importamos o pacote, sendo representado pelo P maiúsculo, mas para o seu uso (validação) é com P minúsculo.
+
+- **Erro de Tipagem**
+
+Se no lugar de colocarmos um dado string em uma variável que exige isso, colocarmos um número, na nossa interface não aparecerá nenhum erro, mas no console sim. Ou seja, percebe-se que esse tipo de validação é a nível de programação.
+
+- **App.js**
+
+Lembre-se de importar o arquivo "Lista" no nosso app.js.
+
+```js
+
+import {Lista} from './components/fragments/Lista';
+import './App.css';
+
+function App() {
+
+  return (
+    <div className="App">
+        <h1>Estudando Tipagem nas Props</h1>
+        <Lista/>
+    </div>
+  );
+}
+
+export default App;
+
+```
+
 ## Inserindo CSS no React
 
 > O CSS pode ser adicionado de forma global na aplicação, por meio do arquivo index.css, por exemplo.
 
-Porém é possível estilizar a nível de componentes;
-Utilizamos o CSS modules para isso;
-Basta criar um arquivo com essa estrutura: Componente.module.css;
-E clamar este CSS no componente;
+- Porém é possível estilizar a nível de componentes;
+- Utilizamos o CSS modules para isso;
+- Basta criar um arquivo com essa estrutura: Componente.module.css;
+- E clamar este CSS no componente;
 
 - **Index.css**
 
@@ -32,8 +220,11 @@ p{
 
 ## Eventos no React (onClick e onSubmit)
 
-> Os eventos de React são os mesmos eventos do DOM, ou seja, temos eventos para responder a um click, por exemplo.
+> Eventos são ações do usuários (como clicar em um botão ou mover o mouse sobre um elemento) que disparam uma função específica (conhecida como "handler" ou "manipulador") para lidar com essas ações.
 
+- Os eventos de React são os mesmos eventos do DOM, ou seja, temos eventos para responder a um click, por exemplo.
+- Essas funções são chamadas de `event handlers ` e são usadas para atualizar o estado do componente ou executar outras ações na aplicação.
+- Pode-se dizer que o navegador escuta a ação do usuário. Lembra que quando estávamos estudando "Node Js + Express" que um elemento quando estava atrelado ao termo "on" remetia a "Ouvir algo" ? Então, aqui é a mesma coisa, por isso que os eventos começam com "on" - onChange - ouvir ação de mudança; onClick - ouvir ação de clicar em algo....
 - O evento é atrelado a uma tag que irá executá-lo.
 - Geralmente um método é atribuído ao evento.
 - Este método deve ser criado no componente.
@@ -460,9 +651,548 @@ Uma prop padrão seria, por exemplo, quando em algum componente colocamos "key" 
 - Como as chaves executam JavaScript, então já criamos nossa condição.
 - É possível usar o `state` para criar as condições.
 
+- **App.js**
+
+```js
+
+import {Condicional} from './components/condicional/Condicional'
+import './App.css';
+
+function App() {
+
+  return (
+    <div className="App">
+        <h1>Renderização Condicional</h1>
+        <Condicional/>
+    </div>
+  );
+}
+
+export default App;
+
+```
+
+Crie uma nova pasta com o nome "componente" e coloque um arquivo JS com o mesmo nome dentro dela.
+
+- **Componente.js**
+
+```js
+
+import {useState} from 'react'
+
+export function Condicional(){
+
+    // estado para manipular os dados do email
+    const [email, setEmail] = useState('')
+
+    // estado para manipular o usuário do email
+    const [userEmail, setUserEmail] = useState('')
+
+    // Função que manipula o nosso form
+    const enviarEmail = (e) => {
+        e.preventDefault() // impede que seja enviado para o servidor, evitando um reload.
+        console.log('Testando email...')
+        setUserEmail(email)
+        console.log(userEmail)
+    }
+
+    return(
+        <div>
+            <h2>Cadastre seu e-mail:</h2>
+            <form>
+                <input 
+                    type='email' 
+                    placeholder='Digite seu e-mail'
+                    onChange={(e) => setEmail(e.target.value)}
+                />
+                <button 
+                    type='submit' 
+                    onClick={enviarEmail}>Enviar e-mail
+                </button>
+            </form>
+        </div>
+    )
+}
+
+```
+
+- **Atributo: Submit** 
+
+Para esse caso, usamos diretamente o botão com o atributo "submit" e junto a ele o evento "onClick", para que quando o usuário click, o form tanto seja enviado, quanto passível de manipulação, ao se conectar com a função "enviarEmail".
+
+- **State: Email**
+
+Como queremos manipular o email com o seu estado `const [userEmail, setUserEmail] = useState('')`, como se fosse o email do usuário, então ele vai passar pelo método "enviarEmail" para depois ser submetido.
+
+No caso, o primeiro state é para pegar os valores que estão sendo digitados no campo de entrada e o outro estado é manipularmos o dono do email.
+
+Para conferirmos que está correto, chamamos o `userEmail` debaixo do botão "Enviar E-mail".
+
+```js
+
+import {useState} from 'react'
+
+export function Condicional(){
+
+    const [email, setEmail] = useState('')
+    const [userEmail, setUserEmail] = useState('')
+
+    const enviarEmail = (e) => {
+        ...
+    }
+
+    return(
+        <div>
+            <h2>Cadastre seu e-mail:</h2>
+            <form>
+                <input /> ...
+                <button 
+                    type='submit' 
+                    onClick={enviarEmail}>Enviar e-mail
+                </button>
+                {
+                    userEmail
+                }
+            </form>
+        </div>
+    )
+}
+
+```
+
+Os "..." é só para aqui no relatório não está repetindo o mesmo código mil vezes. No seu compilador, escreva o código de fato.
+
+Para deixarmos de uma maneira mais organizada podemos fazer da seguinte forma:
+
+```js
+
+{
+    userEmail && (
+        <div>
+            o e-mail do usuário é: {userEmail}
+        </div>
+    )
+}
+
+```
+
+Isso significa que, se o campo "email" for preenchido, então ele deve exibir uma div quando for enviado o email. Para testar, você pode colocar um email fictício e clicar no botão. E também, fazer a mesma coisa, mas sem colocar nada dentro, você verá que a mensagem que elaboramos não vai aparecer. Isso pois, não se encaixa na nossa condicional.
+
+Já podemos vê que a renderizção condicional é ótima quando queremos fornecer segurança ao nosso site, por exemplo, implementando uma espécie de "autenticação". Mas não só com esse recurso podemos fazer isso, com a própria função "enviar email" podemos fazer isso.
+
+Usamos o `&&` para concatenar com a nossa <div>.
+
+- **LimparEmail**
+
+Podemos também incrementar e limpar o email. Quando isso acontece, ele altera o valor do estado `setUserEmail`, consequentemente deixando vazio o `userEmail` e automaticamente a condição que estabelecemos passa a ser falsa.
+
+```js
+
+import {useState} from 'react'
+
+export function Condicional(){
+
+    const [email, setEmail] = useState('')
+    const [userEmail, setUserEmail] = useState('')
+
+    const enviarEmail = (e) => {
+        e.preventDefault()
+        console.log('Testando email...')
+        setUserEmail(email)
+        console.log(email)
+    }
+
+    const limparEmail = (e) => {
+        e.preventDefault()
+        setUserEmail('') // limpa o nosso email
+    }
+
+    return(
+        <div>
+            <h2>Cadastre seu e-mail:</h2>
+            <form>
+                <input 
+                    type='email' 
+                    placeholder='Digite seu e-mail'
+                    onChange={(e) => setEmail(e.target.value)}
+                />
+                <button 
+                    type='submit' 
+                    onClick={enviarEmail}>Enviar e-mail
+                </button>
+                {
+                    userEmail && (
+                        <div>
+                            <p>o e-mail do usuário é: {userEmail}</p>
+                            <button onClick ={limparEmail}>Limapr e-mail</button>c
+                        </div>
+                    )
+                }
+            </form>
+        </div>
+    )
+}
+
+```
+
 ## Renderização de Listas
+
+> Renderização de lista, envolve executarmos uma lista javascript dentro do componente html.
+
+- Para renderizar uma lista vamos primeiramente precisar de um `array`;
+    - Essa lista poderá compor qualquer tipo de dado, mas em uma aplicação real é mais fácil ter-se uma lista de objetos.
+    - Por exemplo, tendo um usuário como tema do nosso objeto, ele poderá ter nome, idade, características e afins.
+- Depois utilizamos a `função map`, para percorrer cada um dos itens; (`for each` e ademais funções básicas de JS poderão ser muito úteis aqui)
+- Podendo assim renderizar algo na tela;
+- É possível `unir operadores condicionais` com a renderização de listas.
+
+- **OutraLista.js**
+
+```js
+
+export function OutraLista({itens}){
+    return (
+        <>
+
+            <h3>Lista de Coisas Boas:</h3>
+            {
+                itens.map( (item) => (
+                    <p>{item}</p>
+                ))
+            }
+        </>
+    )
+}
+
+```
+
+Como estamos usando lógica para mapear os dados da nossa lista vamos abrir {}, mas para renderizar uma tag html usaremos (), ao invés do {} padrão de uma arrowFunction.
+
+Algo que o React reclamou é que quando fazemos um map, por padrão cada item precisa ter seu ID único. 
+
+Isso porque, em um dado real no nosso array teremos um Id que conterá como um chave um id, por exemplo.
+
+Mas nesse caso não temos, então como poderemos imprimir uma propriedade key nos meus elementos n vezes ? Iremos adicionar uma outra prop dita como `index` para capturar a posição de cada elemento.
+
+```js
+
+export function OutraLista({itens}){
+    return (
+        <>
+
+            <h3>Lista de Coisas Boas:</h3>
+            {
+                itens.map((item, index) => (
+                    <p key={index}>{item}</p>
+                ))
+            }
+        </>
+    )
+}
+
+```
+
+O que fizemos não é o mais recomendado, sendo então ter um id no back-end, porém dessa forma é aceitável.
+
+- **Renderização Condional Ternária**
+
+Se por algum acaso chamamos nossa lista, mas não colocarmos dados dentro dela ela iria ser exibida normal, mas sem retornar nada, o que não é legal, deve-se ter ao menos uma resposta indicando que não tem itens naquela lista.
+
+```js
+
+export function OutraLista({itens}){
+    return (
+        <>
+
+            <h3>Lista de Coisas Boas:</h3>
+            { itens.length > 0 ? (
+                itens.map((item, index) => (
+                    <p key={index}>{item}</p>
+                ))) : (
+                    <p>Não há itens na lista!</p>
+                )
+            }
+        </>
+    )
+}
+
+```
+
+Dessa forma, fazemos um if ternário, indicando que se dentro do nosso array o seu tamanho for maior que 0, ou seja, houver algo dentro, então ele executará o nosso map normal, caso contrário irá renderizar apenas um resposta qualquer.
+
+- **App.js**
+
+Usamos o nosso app para chamar o componente lista e também para criarmos os dados que serão exibidos nelas.
+
+O ideal é esses dados virem de fora, porém para fins lúdicos fizemos no nosso app mesmo.
+
+```js
+
+import {OutraLista} from './components/list/OutraLista';
+import './App.css';
+
+function App() {
+
+  const meusItens = ['React','Vue','Angular']
+
+  return (
+    <div className="App">
+        <h1>Renderização de Listas</h1>
+        <OutraLista itens={meusItens}/>
+        <OutraLista itens={[]}/>
+    </div>
+  );
+}
+
+export default App;
+
+```
+
 ## State Lift
+
+> É uma técnica utilizada para compartilhar o state.
+
+- É normal vários componentes `dependerem do mesmo estado`;
+- Então, precisaremos elevar o nível do mesmo a um `componente pai`;
+- Então, centralizamos o state no pai, e `definimos quem usa e quem define ` (setState).  
+
+- **SeuNome.js**
+
+Geralmente, para pegarmos o valor do input é só fazermos um `useState()` padrão. Porém, teríamos problemas quando fossemos subir esse valor do state para reutilizar em outro componente.
+
+```js
+
+import { useState } from "react"
+
+export function SeuNome(){
+
+    const [name, setName] = useState('');
+
+    return (
+        <div>
+            <p>Digite seu nome</p>
+            <input 
+                type="text" 
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Qual o seu nome?"
+            />
+        </div>
+    )
+}
+
+```
+
+Para ajeitarmos essa questão só precisamos colocar o nosso state no componente pai que não necessariamente precisa ser o nosso "App.js". 
+
+Por exemplo, no exemplo da tipagem da lista, criamos dois componentes - Item e Lista - e Lista era o componente pai de Item...
+
+- **SeuNome.js**
+
+```js
+
+export function SeuNome({setNome}){
+
+    return (
+        <div>
+            <p>Digite seu nome</p>
+            <input 
+                type="text" 
+                onChange={(e) => setNome(e.target.value)}
+                placeholder="Qual o seu nome?"
+            />
+        </div>
+    )
+}
+
+```
+
+- **App.js**
+
+```js
+
+import {SeuNome} from './components/lift/SeuNome';
+import { useState } from "react"
+import './App.css';
+
+function App() {
+
+  const [nome, setNome] = useState('');
+
+  return (
+    <div className="App">
+        <h1>State Lift</h1>
+        <SeuNome setNome={setNome} />
+    </div>
+  );
+}
+
+export default App;
+
+```
+
+Como uma forma de brincar podemos até em tempo real o nosso valor sendo armazenado.
+
+```js
+
+<div className="App">
+    <h1>State Lift</h1>
+    <SeuNome setNome={setNome} />
+    {nome} {/*Edição automática*/}
+</div>
+
+```
+
+Podemos também usar esse dados de outra forma, seguindo a lógica dos outros componentes com um button...
+
+- **SeuNome.js**
+
+```js
+
+export function SeuNome({nome, setNome}){
+
+    const meuNome = (e) => {
+        e.preventDefault()
+        setNome(nome)
+        console.log(nome)
+    }
+
+    return (
+        <div>
+            <p>Digite seu nome</p>
+            <input 
+                type="text" 
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
+                placeholder="Qual o seu nome?"
+            />
+            <button 
+                onClick={meuNome}>Enviar
+            </button>
+        </div>
+    )
+}
+
+```
+
+- **App.js**
+
+```js
+
+import {SeuNome} from './components/lift/SeuNome';
+import {Saudacao} from './components/lift/Saudacao';
+import { useState } from "react"
+import './App.css';
+
+function App() {
+
+  const [nome, setNome] = useState('');
+
+  return (
+    <div className="App">
+        <h1>State Lift</h1>
+        <SeuNome nome={nome} setNome={setNome} />
+        <Saudacao nome={nome}/>
+    </div>
+  );
+}
+
+export default App;
+
+```
+
+Podemos fazer muito mais do que fizemos, pois integrar o state ao componente pai é a premissa do State Lift, mas podemos também "manipular" esse dado da seguinte forma.
+
+- **Saudacao.js**
+
+Crie um componente com este nome na mesma pasta que esta o arquivo "SeuNome.js".
+
+```js
+
+export function Saudacao({nome}){
+    return <> <p>Bom dia {nome} </p> </>
+}
+
+```
+
+E no nosso arquivo "App.js" o importe.
+
+- **App.js**
+
+```js
+
+import {SeuNome} from './components/lift/SeuNome';
+import {Saudacao} from './components/lift/Saudacao';
+import { useState } from "react"
+import './App.css';
+
+function App() {
+
+  const [nome, setNome] = useState('');
+
+  return (
+    <div className="App">
+        <h1>State Lift</h1>
+        <SeuNome nome={nome} setNome={setNome} />
+        <Saudacao nome={nome}/>
+    </div>
+  );
+}
+
+export default App;
+
+```
+
+Além disso, podemos incrementar ainda mais o nosso código. Dessa forma, temos um fim para o state lift que é alterar o dado para se ter uma saudação.
+
+- **Saudacao.js**
+
+```js
+
+export function Saudacao({nome}){
+
+    function gerarSaudacao(algumNome){
+        return `Olá, ${algumNome}, tudo bem?`
+    }
+
+    return <> <p>{gerarSaudacao(nome)}</p> </>
+}
+
+```
+
+Podemos incrementar ainda mais evitando que erros aconteçam quando não tem nada dentro do input, colocando em prática os nossos estudos de renderização condicional.
+
+- **Saudacao.js**
+
+```js
+
+export function Saudacao({nome}){
+
+    function gerarSaudacao(algumNome){
+        return `Olá, ${algumNome}, tudo bem?`
+    }
+
+    return <> { nome && <p>{gerarSaudacao(nome)}</p>} </>
+}
+
+```
+
 ## Implementando o React Router
+
+> O react router é um pacote para mudança de URLs da aplicação.
+
+- Podemos assim acessar outras views, `sem o page roload`.
+- `Trocando apenas uma parte do layout da aplicação`, ou seja, o que muda de view para view.
+- Precisamos `instalar este pacote` no projeto;
+- E também realizar algumas mudanças em como o App é estruturado.
+
+
+
+
+
+
+
+
 ## React Icons
 
 ## Referências
