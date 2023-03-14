@@ -1183,18 +1183,297 @@ export function Saudacao({nome}){
 
 - Podemos assim acessar outras views, `sem o page roload`.
 - `Trocando apenas uma parte do layout da aplicação`, ou seja, o que muda de view para view.
-- Precisamos `instalar este pacote` no projeto;
+- Precisamos instalar este pacote no projeto: `npm install react-router-dom`;
 - E também realizar algumas mudanças em como o App é estruturado.
 
+- **App.js** 
 
+Esse componente - Router - é o que vai rotear as nossas páginas.
 
+Nesse bloco de código eu posso tanto as views, rotas, quanto também componentes padrões que serão parte do nosso layout.
 
+```js
 
+import { BrowserRouter as Router, Routes ,Route,Link } from "react-router-dom"
+import './App.css';
 
+function App() {
+
+  return (
+    <div className="App">
+      <Router>
+        <ul>
+          <li>
+            <Link to='/'>Home</Link>
+          </li>
+            <li>
+            <Link to='/empresa'>Empresa</Link>
+          </li>
+            <li>
+            <Link to='/contato'>Contato</Link>
+          </li>
+        </ul>
+      </Router>
+    </div>
+  );
+}
+
+export default App;
+
+```
+
+- `Link to` funciona como uma tag <a> para fazer redirec, mas ele atua mais como uma tag especial para um roteamento por baixo dos panos.
+
+Após termos configurado o nosso "App.js" vamos criar as páginas e colocar os componentes dentro delas.
+
+Para simplificar o mesmo código qu eue colocar abaixo você copia e cola e só muda o título e o nome da página para: Home - Empresa - Contato. Tudo dentro da pasta "pages".
+
+```js
+
+export function Home(){
+    return (
+        <div>
+            <h1>Home</h1>
+            <p>Contéudo da Página</p>
+        </div>
+    )
+}
+
+``` 
+
+Embora utilizamos as tags <ul> e <li> para fazer uma lista, o próprio react-router tem sua própria configuração para isso, no caso: <Routes> e <Route>.
+
+Embora que, fizemos a nossa barra de navegação - NavBar - com as <ul> e <li> precisamos ainda chamar os nossos componentes e para isso utilizaremos o componente <Routes>, outrora dito como <Switch> para que quando cliquemos em "home" ele endereçar para o nosso componente "home" sem precisar de um reload e na mesma seção da página.
+
+```js
+
+import { BrowserRouter as Router, Routes ,Route,Link } from "react-router-dom"
+import {Home} from './pages/Home';
+import {Empresa} from './pages/Empresa';
+import {Contato} from './pages/Contato';
+import './App.css';
+
+function App() {
+
+  return (
+    <div className="App">
+      <Router>
+        <ul>
+          <li>
+            <Link to='/'>Home</Link>
+          </li>
+            <li>
+            <Link to='/empresa'>Empresa</Link>
+          </li>
+            <li>
+            <Link to='/contato'>Contato</Link>
+          </li>
+        </ul>
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/empresa' element={<Empresa />} />
+          <Route path='/contato' element={<Contato />} />
+        </Routes>
+      </Router>
+    </div>
+  );
+}
+
+export default App;
+
+```
+
+Quando o react ler as path para acessar as páginas ele sempre vai ler o "/" e depois o "/ " alguma coisa, porque ele vai vê que tudo começa com "/". Assim, para evitarmos esse tipo de leitura diremos que a path "/" só ser acessada quando o path for exatamente "/". 
+
+Assim, evita-se que a página fique congelada na página home.
+
+```js
+
+import { BrowserRouter as Router, Routes ,Route,Link } from "react-router-dom"
+import {Home} from './pages/Home';
+import {Empresa} from './pages/Empresa';
+import {Contato} from './pages/Contato';
+import './App.css';
+
+function App() {
+
+  return (
+    <div className="App">
+      <Router>
+        <ul>
+          <li>
+            <Link to='/'>Home</Link>
+          </li>
+            <li>
+            <Link to='/empresa'>Empresa</Link>
+          </li>
+            <li>
+            <Link to='/contato'>Contato</Link>
+          </li>
+        </ul>
+        <Routes>
+          <Route exact path='/' element={<Home />} />
+          <Route path='/empresa' element={<Empresa />} />
+          <Route path='/contato' element={<Contato />} />
+        </Routes>
+      </Router>
+    </div>
+  );
+}
+
+export default App;
+
+```
+
+Percebe-se também que, a nossa barra de navegação é fixa, isso porque, está fora do escopo do <Routes>. Vamos ajeitá-la para fins organizacionais.
+
+- **NavBar.js**
+
+```js
+
+import { Link } from "react-router-dom"
+
+export function NavBar(){
+    return(
+        <ul>
+          <li>
+            <Link to='/'>Home</Link>
+          </li>
+            <li>
+            <Link to='/empresa'>Empresa</Link>
+          </li>
+            <li>
+            <Link to='/contato'>Contato</Link>
+          </li>
+        </ul>
+    )
+}
+```
+
+Após ter criado o componente NavBar, o importe na nossa página principal.
+
+- **App.js**
+
+```js
+
+import { BrowserRouter as Router, Routes ,Route } from "react-router-dom"
+import {Home} from './pages/Home';
+import {Empresa} from './pages/Empresa';
+import {Contato} from './pages/Contato';
+import {NavBar} from './components/NavBar';
+import './App.css';
+
+function App() {
+
+  return (
+    <div className="App">
+      <Router>
+        <NavBar />
+        <Routes>
+          <Route exact path='/' element={<Home />} />
+          <Route path='/empresa' element={<Empresa />} />
+          <Route path='/contato' element={<Contato />} />
+        </Routes>
+      </Router>
+    </div>
+  );
+}
+
+export default App;
+
+```
+
+Da mesma forma que temos a nossa barra de navegaçaõ também temos o nosso <Footer>. E para fins organizacionais, podemos colocar tanto a NavBar quanto ele na pasta Layout.
+
+- **Footer**
+
+```js
+
+export function Footer(){
+    return(
+       <footer>Rodapé</footer>
+    )
+}
+
+```
+
+O interessante de tudo isso é que todo esse layout não será substituído, mas reaproveitado página a página.
+
+- **App.js**
+
+```js
+
+import { BrowserRouter as Router, Routes ,Route } from "react-router-dom"
+import {Home} from './pages/Home';
+import {Empresa} from './pages/Empresa';
+import {Contato} from './pages/Contato';
+import {NavBar} from './layout/NavBar';
+import {Footer} from './layout/Footer';
+import './App.css';
+
+function App() {
+
+  return (
+    <div className="App">
+      <Router>
+        <NavBar />
+        <Routes>
+          <Route exact path='/' element={<Home />} />
+          <Route path='/empresa' element={<Empresa />} />
+          <Route path='/contato' element={<Contato />} />
+        </Routes>
+        <Footer />
+      </Router>
+    </div>
+  );
+}
+
+export default App;
+
+```
+
+E para finalizar vamos estilizar melhor o nosso navBar.
+
+- **NavBar.js**
+
+```js
+import { Link } from "react-router-dom"
+import styles from './NavBar.module.css'
+
+export function NavBar(){
+    return(
+        <ul className={styles.list}>
+          <li className={styles.item}>
+            <Link to='/'>Home</Link>
+          </li>
+            <li className={styles.item}> 
+            <Link to='/empresa'>Empresa</Link>
+          </li>
+            <li className={styles.item}>
+            <Link to='/contato'>Contato</Link>
+          </li>
+        </ul>
+    )
+}
+```
+
+- **Nav.module.css**
+
+```css
+
+.list{
+    display: flex;
+    list-style: none;
+}
+
+.item{
+    margin-right: 1rem;
+}
+
+```
 
 
 ## React Icons
-
 ## Referências
 
 - https://mui.com/material-ui/react-button/
