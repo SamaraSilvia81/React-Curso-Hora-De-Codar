@@ -1472,9 +1472,67 @@ export function NavBar(){
 
 ```
 
-
 ## React Icons
+
+> O React Icons é um pacote de ícones externo.
+
+- Precisamos adicionar ao projeto através do npm: ``
+- Ele nos permite adicionar ícones ao projeto com uma `sintaxe parecida a de componente`.
+- Além disso `há uma grande quantidade de ícones` disponíveis.
+
+Vamos usar o <footer> para ser o nosso modelo de uso desse pacote.
+
+- **Footer.module.css**
+
+Crie um arquivo na pasta de layout com o nome do título, ou seja, na configuração do module CSS.
+
+```css
+
+.social_list{
+    display: flex;
+    justify-content: center; /* horizontal */
+    align-items: center; /* vertical */
+    list-style: none;
+}
+
+.social_list li{
+    margin: 0 1em;
+}
+
+.social_list svg{
+    font-size: 1.5em;
+    cursor: pointer;
+    color: blueviolet;
+}
+
+```
+
+- **Footer.js**
+
+Não esqueça de atualizar o seu arquivo propriamente dito.
+
+```js
+
+import {FaFacebook,FaInstagram,FaLinkedin} from 'react-icons/fa'
+import styles from './Footer.module.css'
+
+export function Footer(){
+    return (
+        <footer>
+           <ul className={styles.social_list}>
+            <li><FaFacebook/></li>
+            <li><FaInstagram/></li>
+            <li><FaLinkedin/></li>
+           </ul>
+           <p>Nosso Rodapé</p>
+        </footer>
+    )
+}
+
+```
+
 ## Referências
 
 - https://mui.com/material-ui/react-button/
+- https://react-icons.github.io/react-icons/
 - https://pt-br.reactjs.org/docs/handling-events.html
