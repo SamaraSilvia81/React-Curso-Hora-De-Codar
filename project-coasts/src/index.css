@@ -1,0 +1,12 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box; /* Inputs e buttons não ultrapassar as áreas máximas das divs*/
+    font-family: 'Opens Sans', sans-serif;
+}
+
+html, body, #root{
+    background-color: #EFEFEF;
+    height: 100%;
+    
+}
