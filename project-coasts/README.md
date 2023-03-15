@@ -122,3 +122,174 @@ html, body, #root{
 Não esqueça de baixar as fotos no repositório do projeto - última brnach - e colocar todas elas na pasta img.
 
 ![Respositório Link](https://github.com/matheusbattisti/curso_react_yt/tree/16_projeto_costs)
+
+## Estruturando o Projeto
+
+Roteamento...
+
+Todo o conteúdo das nossas páginas, sendo chamadas pelo <Routes> serão colocadas dentro de um componente específico chamado de <Container/>, assim poderemos reutlizar ele em vários locais. Não somente ele, mas podemos colcoar também componentes de mensagens (alertas) e outros.
+
+Para isso, dentro da pasta `layout` que criamos vamos criar um arquivo `Container.jsx` e colocarmos todo essa call dentro.
+
+- **Container.jsx**
+
+```jsx
+
+import styles from './Container.css'
+
+export function Container(props){
+    return <div> {props.children} </div>
+}
+
+```
+
+A lógica que o rege é que, esse nosso container vai receber props, que por sua vez, serão todas as nossas páginas.
+
+Dentro do container iremos alterar classes que mudarão a disposição dos nossos itens nas páginas. Então, será um container flex.
+
+Quando envolvemos vários componentes em um só, se não colocarmos uma sintaxe especial para referenciar (props), então ele não vai entender onde colocar as nossas páginas. 
+
+Por exemplo, o próprio <Routes> já faz isso, mas faremos de novo, porém com o nosso próprio container.
+
+`props.children` refere-se aos elementos filhos que estão encapsulados nesse componente <Container/> serão encaixados nessa div.
+
+```jsx
+
+import {BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+import { NavBar } from './components/layout/NavBar';
+import { Footer } from './components/layout/Footer';
+import { Home } from './components/pages/Home';
+import { Company } from './components/pages/Company';
+import { Contact}  from './components/pages/Contact';
+import { NewProject } from './components/pages/NewProject';
+
+import { Container } from './components/layout/Container';
+
+function App() {
+  return (
+    <Router>
+        <NavBar/>
+        <Container>
+        <Routes>
+          <Route exact path="/" element={<Home/>}/>
+          <Route exact path="/company" element={<Company/>}/>
+          <Route exact path="/contact" element={<Contact/>}/>
+          <Route exact path="/newproject" element={<NewProject/>}/>
+        </Routes>
+        </Container>
+        <Footer/>
+    </Router>
+  )
+}
+
+export default App
+
+```
+
+Vamos agora estilizar um pouco o nosso container.
+
+- **Container.module.css**
+
+```css
+
+.container{
+    width: 1200px; /*Largura máxima*/
+    display: flex;
+    justify-content: space-between; /* Espaçar os elementos iguais conforme a linha horizontal */
+    margin: 0 auto;
+    flex-wrap: wrap; /*Quando os elementos filhos ultrapassarem a largura limite ele irão para baixo, criando outra linha*/
+}
+
+/*Classes Help*/
+
+.min-height{
+    min-height: 75%; /*Para o conteúdo ocupar um grande espaço na tela*/
+}
+
+```
+
+- **Container.jsx**
+
+```jsx
+
+import styles from './Container.module.css'
+
+export function Container(props){
+    return <div className={`${styles.container} ${styles[props.customClass]}`}> {props.children} </div>
+}
+
+```
+
+Supondo que eu não queira que todas as minhas classes sejam propagadas para todos os meus componentes, então eu uso o "template string" para fazer essa seleção, ofertando dinamicidade, pois iremos tratar o styles como uma variável.
+
+Para eu inserir classes que venham das minhas props iremos criar um [], para que esse styles acesse de forma seletiva as classes, e colocaremos o nome da variável.
+
+```jsx
+
+// Container.jsx
+
+import {BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+import { NavBar } from './components/layout/NavBar';
+import { Footer } from './components/layout/Footer';
+import { Home } from './components/pages/Home';
+import { Company } from './components/pages/Company';
+import { Contact}  from './components/pages/Contact';
+import { NewProject } from './components/pages/NewProject';
+
+import { Container } from './components/layout/Container';
+
+function App() {
+  return (
+    <Router>
+        <NavBar/>
+        <Container customClass="min-height">
+        <Routes>
+          <Route exact path="/" element={<Home/>}/>
+          <Route exact path="/company" element={<Company/>}/>
+          <Route exact path="/contact" element={<Contact/>}/>
+          <Route exact path="/newproject" element={<NewProject/>}/>
+        </Routes>
+        </Container>
+        <Footer/>
+    </Router>
+  )
+}
+
+export default App
+
+```
+
+Ao colocarmos essa nova variável de estilo `customClass="min-height"` estamos ativando a classe que criamos.
+
+Outras classes que usaremos mais tarde são:
+
+```css
+
+.container{
+    width: 1200px;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+
+/*Classes Help*/
+
+.min-height{
+    min-height: 75%;
+}
+
+.start{
+    justify-content: flex-start; /*Colocará todos pro inicio*/
+}
+
+/*O flex vem em row (linha)*/
+
+.column{
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+```
