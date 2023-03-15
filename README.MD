@@ -12,7 +12,7 @@
 - Aula 02: `Instalação`
 - Aula 03: `JSX`
 - Aula 04: `Components`
-- Aula 05: `Props
+- Aula 05: `Props`
 - Aula 06: `CSS Modules`
 - Aula 07: `Fragments`
 - Aula 08: `Avançando em Props - Tipagem`
