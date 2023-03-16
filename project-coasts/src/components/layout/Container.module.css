@@ -17,7 +17,6 @@
 }
 
 /*O flex vem em row (linha)*/
-
 .column{
     flex-direction: column;
     justify-content: flex-start;

@@ -125,11 +125,39 @@ Não esqueça de baixar as fotos no repositório do projeto - última brnach - e
 
 ## Estruturando o Projeto
 
-Roteamento...
+Vamos fazer o roteamento das nossas páginas, implementando o React Router.
 
-Todo o conteúdo das nossas páginas, sendo chamadas pelo <Routes> serão colocadas dentro de um componente específico chamado de <Container/>, assim poderemos reutlizar ele em vários locais. Não somente ele, mas podemos colcoar também componentes de mensagens (alertas) e outros.
+- **App.jsx**
 
-Para isso, dentro da pasta `layout` que criamos vamos criar um arquivo `Container.jsx` e colocarmos todo essa call dentro.
+```jsx
+
+import {BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+import { Home } from './components/pages/Home';
+import { Company } from './components/pages/Company';
+import { Contact}  from './components/pages/Contact';
+import { NewProject } from './components/pages/NewProject';
+
+function App() {
+  return (
+    <Router>
+        <Routes>
+          <Route exact path="/" element={<Home/>}/>
+          <Route exact path="/company" element={<Company/>}/>
+          <Route exact path="/contact" element={<Contact/>}/>
+          <Route exact path="/newproject" element={<NewProject/>}/>
+        </Routes>
+    </Router>
+  )
+}
+
+export default App
+
+```
+
+Todo o conteúdo das nossas páginas, sendo chamadas pelo <Routes> serão colocadas dentro de um componente específico chamado de <Container/>, assim poderemos reutlizar ele em vários locais. Não somente ele, mas podemos colocar também componentes de mensagens (alertas) e outros.
+
+Para isso, dentro da pasta `layout` vamos criar um arquivo `Container.jsx` e colocarmos todo essa call dentro.
 
 - **Container.jsx**
 
@@ -153,12 +181,12 @@ Por exemplo, o próprio <Routes> já faz isso, mas faremos de novo, porém com o
 
 `props.children` refere-se aos elementos filhos que estão encapsulados nesse componente <Container/> serão encaixados nessa div.
 
+Em resumo,  uso do <Container> aqui é uma forma de encapsular as rotas em um componente personalizado que fornece estilos e funcionalidades específicas. Isso pode tornar o código mais modular e fácil de manter.
+
 ```jsx
 
 import {BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import { NavBar } from './components/layout/NavBar';
-import { Footer } from './components/layout/Footer';
 import { Home } from './components/pages/Home';
 import { Company } from './components/pages/Company';
 import { Contact}  from './components/pages/Contact';
@@ -169,16 +197,14 @@ import { Container } from './components/layout/Container';
 function App() {
   return (
     <Router>
-        <NavBar/>
         <Container>
-        <Routes>
-          <Route exact path="/" element={<Home/>}/>
-          <Route exact path="/company" element={<Company/>}/>
-          <Route exact path="/contact" element={<Contact/>}/>
-          <Route exact path="/newproject" element={<NewProject/>}/>
-        </Routes>
+          <Routes>
+            <Route exact path="/" element={<Home/>}/>
+            <Route exact path="/company" element={<Company/>}/>
+            <Route exact path="/contact" element={<Contact/>}/>
+            <Route exact path="/newproject" element={<NewProject/>}/>
+          </Routes>
         </Container>
-        <Footer/>
     </Router>
   )
 }
@@ -231,8 +257,6 @@ Para eu inserir classes que venham das minhas props iremos criar um [], para que
 
 import {BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import { NavBar } from './components/layout/NavBar';
-import { Footer } from './components/layout/Footer';
 import { Home } from './components/pages/Home';
 import { Company } from './components/pages/Company';
 import { Contact}  from './components/pages/Contact';
@@ -243,16 +267,14 @@ import { Container } from './components/layout/Container';
 function App() {
   return (
     <Router>
-        <NavBar/>
         <Container customClass="min-height">
-        <Routes>
-          <Route exact path="/" element={<Home/>}/>
-          <Route exact path="/company" element={<Company/>}/>
-          <Route exact path="/contact" element={<Contact/>}/>
-          <Route exact path="/newproject" element={<NewProject/>}/>
-        </Routes>
+          <Routes>
+            <Route exact path="/" element={<Home/>}/>
+            <Route exact path="/company" element={<Company/>}/>
+            <Route exact path="/contact" element={<Contact/>}/>
+            <Route exact path="/newproject" element={<NewProject/>}/>
+          </Routes>
         </Container>
-        <Footer/>
     </Router>
   )
 }
@@ -296,7 +318,7 @@ Outras classes que usaremos mais tarde são:
 
 ## Estruturando a NavBar e Footer
 
-Tendo criado a pasta layout, vamos olhar os arquivos NavBar.jsx e Footer.jsx, além de os configurar e estilizar.
+Tendo criado a pasta layout, vamos criar os arquivos NavBar.jsx e Footer.jsx, além de os configurar e estilizar.
 
 - **Navbar.jsx**
 
@@ -317,23 +339,254 @@ export function NavBar(){
 
 ```
 
+Essa é a forma simples de usarmos o nosso NavBar, mas nesse caso também vamos utilizar o nosso container, já que ele é um componente estrutural que vai nos ajudar a posicionar melhor os elementos em diversas partes do projeto.
+
+```jsx
+
+import { Link } from 'react-router-dom';
+import { Container } from './Container'
+import styles from './Navbar.module.css'
+import logo from '../../img/logo.png'
+
+export function NavBar(){
+    return(
+        <nav>
+          <Container>
+            <Link to='/'><img src={logo} alt="Coasts Logo"/></Link>
+            <Link to='/'>Home</Link>
+            <Link to='/company'>Company</Link>
+            <Link to='/contact'>Contact</Link>
+            <Link to='/newproject'>NewProject</Link>
+          </Container>
+        </nav>
+    )
+}
+
+```
+
+Mudamos de <ul> para <nav>, por questões semánticas de html.
+
+Não esqueça de colcoar {} quando importar os componentes se neles você estruturou como `export function...`
+
+É importante também colocarmos cada link organizado como listas, logo vamos os encapsular detro de <li>.
+
+```jsx
+
+import { Link } from 'react-router-dom';
+import { Container } from './Container'
+import styles from './Navbar.module.css'
+import logo from '../../img/logo.png'
+
+export function NavBar(){
+    return(
+        <nav>
+          <Container>
+            <Link to='/'><img src={logo} alt="Coasts Logo"/></Link>
+            <ul>
+              <li><Link to='/'>Home</Link></li>
+              <li><Link to='/company'>Company</Link></li>
+              <li><Link to='/contact'>Contact</Link></li>
+            </ul>
+          </Container>
+        </nav>
+    )
+}
+
+```
+
+Vamos estilizar agora...
+
+- **NavBar.module.css**
+
+```css
+
+.navBar{
+    display: flex;
+    justify-content: space-between;
+    background-color: #222;
+    padding: 1em;
+}
+
+.list{
+    display: flex;
+    list-style: none;
+    align-items: center; /*Alinhar na vertical*/ 
+}
+
+.item{
+    margin-right: 1em;
+}
+
+.item a{
+    color: #fff;
+    text-decoration: none;
+}
+
+.item a:hover{
+    color: #FFBB33;
+}
+
+```
+
+Uma dica para selecionar todos os <li> é apertar `ctrl+alt+(↑ ou → ou ↓ ou ←)`.
+
+Não esqueça de chamar esses estilos dentro do nosso arquivo.
+
+```jsx
+import { Link } from 'react-router-dom';
+import { Container } from './Container'
+import styles from './NavBar.module.css'
+import logo from '../../img/logo.png'
+
+export function NavBar(){
+    return(
+        <nav className={styles.navBar}>
+          <Container>
+            <Link to='/'><img src={logo} alt="Coasts Logo"/></Link>
+            <ul className={styles.list}>
+              <li className={styles.item}><Link to='/'>Home</Link></li>
+              <li className={styles.item}><Link to='/projects'>Projects</Link></li>
+              <li className={styles.item}><Link to='/about'>About</Link></li>
+              <li className={styles.item}><Link to='/contact'>Contact</Link></li>
+            </ul>
+          </Container>
+        </nav>
+    )
+}
+
+```
+
+- **Projects.jsx**
+
+Vamos também criar a página que vai exibir todos os nosso projetos na barra de navegação, chamada de `Projects.jsx`.
+
+```jsx
+
+// App.jsx
+
+import {BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+import { NavBar } from './components/layout/NavBar';
+import { Footer } from './components/layout/Footer';
+import { Home } from './components/pages/Home';
+import { Company } from './components/pages/Company';
+import { Contact}  from './components/pages/Contact';
+import { NewProject } from './components/pages/NewProject';
+import { Projects } from './components/pages/Projects';
+
+import { Container } from './components/layout/Container';
+
+function App() {
+  return (
+    <Router>
+        <NavBar/>
+        <Container customClass="min-height">
+        <Routes>
+          <Route exact path="/" element={<Home/>}/>
+          <Route exact path="/projects" element={<Projects/>}/>
+          <Route exact path="/company" element={<Company/>}/>
+          <Route exact path="/contact" element={<Contact/>}/>
+          <Route exact path="/newproject" element={<NewProject/>}/>
+        </Routes>
+        </Container>
+        <Footer/>
+    </Router>
+  )
+}
+
+export default App
+
+```
+
+E é claro vamos fazer essa importação na nossa NavBar.
+
+```jsx
+
+import { Link } from 'react-router-dom';
+import { Container } from './Container'
+import styles from './NavBar.module.css'
+import logo from '../../img/logo.png'
+
+export function NavBar(){
+    return(
+        <nav class={styles.navBar}>
+          <Container>
+            <Link to='/'><img src={logo} alt="Coasts Logo"/></Link>
+            <ul class={styles.list}>
+              <li class={styles.item}><Link to='/'>Home</Link></li>
+              <li class={styles.item}><Link to='/projects'>Projects</Link></li>
+              <li class={styles.item}><Link to='/company'>Company</Link></li>
+              <li class={styles.item}><Link to='/contact'>Contact</Link></li>
+            </ul>
+          </Container>
+        </nav>
+    )
+}
+
+```
+
+Para finalizar vamos estilizar e configurar o footer.
+
 - **Footer.jsx**
 
 ```jsx
 
-import {FaFacebook,FaInstagram,FaLinkedin} from 'react-icons/fa'
+import {FaGithub,FaInstagram,FaLinkedin} from 'react-icons/fa'
+import styles from './Footer.module.css'
 
 export function Footer(){
     return (
-        <footer>
-           <ul>
-            <li><FaFacebook/></li>
+        <footer className={styles.footer}>
+           <ul className={styles.social_list}>
+            <li><FaGithub/></li>
             <li><FaInstagram/></li>
             <li><FaLinkedin/></li>
            </ul>
-           <p>Nosso Rodapé</p>
+           <p className={styles.copy_right}><span>Coasts</span> &copy; 2023</p>
         </footer>
     )
+}
+
+```
+
+- **Footer.module.css**
+
+```css
+
+.footer{
+    background-color: #222;
+    color: #fff;
+    padding: 3em;
+    text-align: center;
+}
+
+.social_list{
+    display: flex;
+    list-style-type: none;
+    justify-content: center;
+}
+
+.social_list li{
+    margin: 0 1em;
+    color: #fff;
+}
+
+.social_list li:hover{
+    color: #FFBB33;
+}
+
+.social_list svg{
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
+.copy_right{
+    margin-top: 2em;
+}
+
+.copy_right span{
+    font-weight: bold;
+    color: #FFBB33;
 }
 
 ```
@@ -347,9 +600,10 @@ import {BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { NavBar } from './components/layout/NavBar';
 import { Footer } from './components/layout/Footer';
 import { Home } from './components/pages/Home';
-import { Company } from './components/pages/Company';
+import { About } from './components/pages/About';
 import { Contact}  from './components/pages/Contact';
 import { NewProject } from './components/pages/NewProject';
+import { Projects } from './components/pages/Projects';
 
 import { Container } from './components/layout/Container';
 
@@ -360,7 +614,8 @@ function App() {
         <Container customClass="min-height">
         <Routes>
           <Route exact path="/" element={<Home/>}/>
-          <Route exact path="/company" element={<Company/>}/>
+          <Route exact path="/projects" element={<Projects/>}/>
+          <Route exact path="/about" element={<About/>}/>
           <Route exact path="/contact" element={<Contact/>}/>
           <Route exact path="/newproject" element={<NewProject/>}/>
         </Routes>
