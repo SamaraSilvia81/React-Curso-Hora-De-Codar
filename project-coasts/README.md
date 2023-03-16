@@ -850,3 +850,307 @@ export function NewProject(){
 }
 
 ```
+
+## Componentização de Formulário
+
+Vamos componentizar, ou seja, envolver cada parte do nosso formulário por componentes para que possamos lá na frente reutilizar essas linhas de código.
+
+Vamos criar uma pasta chamada "form" para ter os componentes dos formulários. E nela vamos inserir o arquivo `Input.jsx`.
+
+- **Input.jsx**
+
+```jsx
+
+import styles from './Input.module.css'
+
+export function Input({type,text,name,placeholder,handleOnChange,value}){
+    return (
+       <div className={styles.form_control}>
+        <label htmlFor={name}>{text}</label>
+        <input 
+            type={type}
+            name={name} 
+            id={name}
+            value={value}
+            placeholder={placeholder}
+            onChange={handleOnChange}
+        />
+       </div>
+    )
+}
+
+```
+
+```css
+
+.form_control{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1em;  /*Afasta os outros inputs*/
+}
+
+.form_control label{
+    margin-bottom: .6em; /*Afasta as labels dos inputs*/
+    font-weight: bold;
+}
+
+.form_control input{
+    padding: .7em; /*Afastamento interno do input*/
+    border-radius: 0;
+    border: none;
+}
+
+.form_control input::placeholder{
+    color: #7b7b7b;
+}
+
+```
+
+Vamos agora inserir os dados no `ProjectForm.jsx`
+
+```jsx
+
+import styles from './ProjectForm.module.css'
+import {Input} from '../form/Input'
+
+export function ProjectForm(){
+    return (
+        <form className={styles.form}>
+           <Input 
+            type='text' 
+            text='Nome do Projeto' 
+            name='name'
+            placeholder='Insira o nome do projeto'
+           />
+            <Input 
+            type='number' 
+            text='Orçamento do Projeto' 
+            name='name'
+            placeholder='Insira o orçamento total'
+           />
+           <div>
+            <select name="category_id">
+                <option disabled selected>Selecione a categoria</option>
+            </select>
+           </div>
+           <Input 
+            type='submit' 
+            value='Criar Projeto'
+           />
+        </form>
+    )
+}
+
+```
+
+Da mesma forma, que estilizamos os inputs vamos estilizar a "select".
+
+```jsx
+
+import styles from './Select.module.css'
+
+export function Select({text,name,options,handleOnChange,value}){
+    return (
+       <div className={styles.form_control}>
+        <label htmlFor={name}>{text}:</label>
+        <select name={name} id={name}>
+            <option>Selecione uma opção</option>
+        </select>
+       </div>
+    )
+}
+
+```
+
+Para o css você cria um arquivo no mesmo formato que os anteriores e copia e cola o que fizemos no input, modificando apenas "input" por "select".
+
+- **ProjectForm.jsx**
+
+```jsx
+
+import styles from './ProjectForm.module.css'
+import {Input} from '../form/Input'
+import {Select} from '../form/Select'
+
+export function ProjectForm(){
+    return (
+        <form className={styles.form}>
+           <Input 
+            type='text' 
+            text='Nome do Projeto' 
+            name='name'
+            placeholder='Insira o nome do projeto'
+           />
+            <Input 
+            type='number' 
+            text='Orçamento do Projeto' 
+            name='name'
+            placeholder='Insira o orçamento total'
+           />
+           <Select 
+            name='category_id' 
+            text='Selecione a categoria'
+           />
+           <Input 
+            type='submit' 
+            value='Criar Projeto'
+           />
+        </form>
+    )
+}
+
+```
+
+- **Select.module.css**
+
+```css
+
+.form_control{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1em;
+}
+
+.form_control label{
+    margin-bottom: .6em;
+    font-weight: bold;
+}
+
+.form_control select{
+    padding: .7em; 
+    border-radius: 0;
+    border: none;
+}
+
+```
+
+Para finalizarmos, falta apenas o botão de enviar que para tal iremos criar um arquivo na pasta form, dita `SubmitButton.jsx`.
+
+- **SubmitButton.jsx**
+
+```jsx
+
+import styles from './SubmitButton.module.css'
+
+export function SubmitButton({text}){
+    return (
+       <div className={styles.form_control}>
+       <button className={styles.btn}>{text}</button>
+       </div>
+    )
+}
+
+```
+
+- **SubmitButton.module.css**
+
+```css
+
+.btn{
+    background-color: #222;
+    color: #fff;
+    padding: 0.7em 1.2em;
+    text-decoration: none;
+    transition: .5s;
+    cursor: pointer;
+    border: none;
+}
+
+.btn:hover{
+    color:#ffbb33;
+}
+
+```
+
+- **ProjectForm.jsx**
+
+```jsx
+
+import styles from './ProjectForm.module.css'
+import {Input} from '../form/Input'
+import {Select} from '../form/Select'
+import {SubmitButton} from '../form/SubmitButton'
+
+export function ProjectForm(){
+    return (
+        <form className={styles.form}>
+           <Input 
+            type='text' 
+            text='Nome do Projeto' 
+            name='name'
+            placeholder='Insira o nome do projeto'
+           />
+            <Input 
+            type='number' 
+            text='Orçamento do Projeto' 
+            name='name'
+            placeholder='Insira o orçamento total'
+           />
+           <Select 
+            name='category_id' 
+            text='Selecione a categoria'
+           />
+           <SubmitButton/>
+        </form>
+    )
+}
+
+```
+
+No entanto, não sabemos se esse botão terá o fim de crição, edição..., logo para sabermos sua real funcionalidade podemos pedir ajuda ao componente pai <NewProject/> e colocar uma props no componente <ProjectForm/>.
+
+- **NewProject.jsx**
+
+```jsx
+
+import { ProjectForm } from '../project/ProjectForm'
+import styles from './NewProject.module.css'
+
+export function NewProject(){
+    return(
+        <div className={styles.newproject_container}>
+            <h1>Criar Projeto</h1>
+            <p>Crie seu projeto para depois adicionais os serviços</p>
+            <ProjectForm btnText="Criar projeto"/>
+        </div>
+    )
+}
+
+```
+
+- **ProjectForm.jsx**
+
+```jsx
+
+import styles from './ProjectForm.module.css'
+import {Input} from '../form/Input'
+import {Select} from '../form/Select'
+import {SubmitButton} from '../form/SubmitButton'
+
+export function ProjectForm({btnText}){
+    return (
+        <form className={styles.form}>
+           <Input 
+            type='text' 
+            text='Nome do Projeto' 
+            name='name'
+            placeholder='Insira o nome do projeto'
+           />
+            <Input 
+            type='number' 
+            text='Orçamento do Projeto' 
+            name='name'
+            placeholder='Insira o orçamento total'
+           />
+           <Select 
+            name='category_id' 
+            text='Selecione a categoria'
+           />
+           <SubmitButton text={btnText}/>
+        </form>
+    )
+}
+
+```
+
+Se vocês notarem existe uma relação de props entre - LinkButton - que importa - NewProject - que import - ProjectForm - que possue uma prop para o componente - SubmitButton - que também tem uma prop que receberá como valor o que foi escrito em - ProjectForm -. 
