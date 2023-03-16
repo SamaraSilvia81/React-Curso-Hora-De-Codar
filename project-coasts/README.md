@@ -1321,3 +1321,463 @@ export function ProjectForm({btnText}){
 }
 
 ```
+
+## Inserindo os dados no API
+
+Tendo feito a conexão com API, criando o nosso banco de dados com "Json.server" e imprimimo as opções do select no nosso front. Agora vamos inserir os dados na nossa API.
+
+Para não poluirmos o nosso componente de form, vamos no componente pai - newProject - e colocaremos os metódos lá.
+
+Antes de tudo, vamos estar importando um outro hook chamado `useNavigate()`, no qual nos permite fazer um redirect nas páginas do nosso sistema. Ele permite o redirecionamento do usuário quando precisarmos, no caso, quando der um "post" ele poderá redirecionar para outra página.
+
+- **NewProject.jsx**
+
+```jsx
+
+```
+
+Os projetos terão atributos que inicialmente serão zerados, visto que serão atualizados ao longo do sistema.
+
+```jsx
+
+import { useNavigate  } from 'react-router-dom'
+import { ProjectForm } from '../project/ProjectForm'
+import styles from './NewProject.module.css'
+
+export function NewProject(){
+
+    const history = useNavigate ()
+
+    function createPost(project){
+        // initialize cost and services
+        project.cost = 0
+        project.services = []
+    }
+
+    return(
+        <div className={styles.newproject_container}>
+            <h1>Criar Projeto</h1>
+            <p>Crie seu projeto para depois adicionais os serviços</p>
+            <ProjectForm btnText="Criar projeto"/>
+        </div>
+    )
+}
+
+```
+
+Estamos mandando os dados no post como string na rota de /projects. E agora só precisamos passar como prop essa função.
+
+```jsx
+
+import { useNavigate  } from 'react-router-dom'
+import { ProjectForm } from '../project/ProjectForm'
+import styles from './NewProject.module.css'
+
+export function NewProject(){
+
+    const history = useNavigate ()
+
+    function createPost(project){
+
+        // initialize cost and services
+        project.cost = 0
+        project.services = []
+
+        fetch('http://localhost:5000/projects',{
+            method: 'POST',
+            headers:{
+                'Content-Type':"application/json"
+            },
+            body: JSON.stringify(project)
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data)// redirect
+        })
+        .catch((e) => console.log(e))
+    }
+
+    return(
+        <div className={styles.newproject_container}>
+            <h1>Criar Projeto</h1>
+            <p>Crie seu projeto para depois adicionais os serviços</p>
+            <ProjectForm handleSubmit={createPost} btnText="Criar projeto"/>
+        </div>
+    )
+}
+
+```
+
+Tendo passado a prop, vamos aceitá-la no nosso arquivo - ProjectForm -.
+
+Além da nossa função, iremos passar os dados dos projetos `ProjectData` também, isso pois quando enviarmos esses dados para edição teremos que passar pela página pai, então precisamos vê se esses dados estão vindo ou não para inicializarmos eles ou não.
+
+```jsx
+
+import { useState, useEffect } from 'react'
+
+import {Input} from '../form/Input'
+import {Select} from '../form/Select'
+import {SubmitButton} from '../form/SubmitButton'
+
+import styles from './ProjectForm.module.css'
+
+export function ProjectForm({btnText, handleSubmit, projectData}){
+
+    const [categories, setCategories] = useState([]);
+    const [project, setProject] = useState(projectData || {});
+
+    useEffect(() => {
+        fetch("http://localhost:5000/categories",{
+        method: 'GET',
+        headers:{
+            'Content-Type':"application/json"
+        }
+    })
+        .then((res) => res.json())
+        .then((data) => {
+            setCategories(data)
+        })
+        .catch((e) => console.log(err))
+    },[])
+
+    return (
+        <form className={styles.form}>
+           <Input 
+            type='text' 
+            text='Nome do Projeto' 
+            name='name'
+            placeholder='Insira o nome do projeto'
+           />
+            <Input 
+            type='number' 
+            text='Orçamento do Projeto' 
+            name='name'
+            placeholder='Insira o orçamento total'
+           />
+           <Select 
+            name='category_id' 
+            text='Selecione a categoria'
+            options={categories}
+           />
+           <SubmitButton text={btnText} handleSubmit={handleSubmit}/>
+        </form>
+    )
+}
+
+```
+
+Vamos criar também um método para enviar os nosso dados, ou seja, fazer o "submit".
+
+```jsx
+
+import { useState, useEffect } from 'react'
+
+import {Input} from '../form/Input'
+import {Select} from '../form/Select'
+import {SubmitButton} from '../form/SubmitButton'
+
+import styles from './ProjectForm.module.css'
+
+export function ProjectForm({btnText, handleSubmit, projectData}){
+
+    const [categories, setCategories] = useState([]);
+    const [project, setProject] = useState(projectData || {});
+
+    useEffect(() => {
+        fetch("http://localhost:5000/categories",{
+        method: 'GET',
+        headers:{
+            'Content-Type':"application/json"
+        }
+    })
+        .then((res) => res.json())
+        .then((data) => {
+            setCategories(data)
+        })
+        .catch((e) => console.log(err))
+    },[])
+
+    const submit = (e) => {
+        e.preventDefault();
+        handleSubmit(project)
+    }
+
+    return (
+        <form onSubmit={submit} className={styles.form}>
+           <Input 
+            type='text' 
+            text='Nome do Projeto' 
+            name='name'
+            placeholder='Insira o nome do projeto'
+           />
+            <Input 
+            type='number' 
+            text='Orçamento do Projeto' 
+            name='name'
+            placeholder='Insira o orçamento total'
+           />
+           <Select 
+            name='category_id' 
+            text='Selecione a categoria'
+            options={categories}
+           />
+           <SubmitButton text={btnText} handleSubmit={handleSubmit}/>
+        </form>
+    )
+}
+
+```
+
+Dessa forma, vamos executar o método que foi passado como prop (handleSubmit) e passamos o projeto que está cadastrado no nosso formulário como argumento (projectData).
+
+Mas precisamos também atualizar o state do projeto, assim teremos dois métodos. O do `submit` e o `handleChange`.
+
+```jsx
+
+const handleChange = (e) => {
+  setProject({...project,[e.target.name]: e.target.value})
+}
+
+```
+
+Nessa segunda função, iremos alterar o nome do projeto. Para isso, faremos um destruction usando o recurso `spread operator`, ´pegando todos os dados dos projetos até então.
+
+E diremos que o nome do input que é o name do projeto ou budget será igual ao value do input.
+
+Assim, independente do input que preenchermos vai mudar alguma propriedade que foi de texto. 
+
+Tendo feito isso, vamos adicionar esse método como um atributo dos nossos inputs. Dessa forma, poderemos pegar os dados que serão digitados e consequentemente enviar.
+
+```jsx
+
+import { useState, useEffect } from 'react'
+
+import {Input} from '../form/Input'
+import {Select} from '../form/Select'
+import {SubmitButton} from '../form/SubmitButton'
+
+import styles from './ProjectForm.module.css'
+
+export function ProjectForm({btnText, handleSubmit, projectData}){
+
+    const [categories, setCategories] = useState([]);
+    const [project, setProject] = useState(projectData || {});
+
+    useEffect(() => {
+        fetch("http://localhost:5000/categories",{
+        method: 'GET',
+        headers:{
+            'Content-Type':"application/json"
+        }
+    })
+        .then((res) => res.json())
+        .then((data) => {
+            setCategories(data)
+        })
+        .catch((e) => console.log(err))
+    },[])
+
+    const submit = (e) => {
+        e.preventDefault();
+        handleSubmit(project)
+    }
+
+    const handleChange = (e) => {
+        setProject({...project,[e.target.name]: e.target.value})
+        console.log(project)
+    }
+
+    return (
+        <form onSubmit={submit} className={styles.form}>
+           <Input 
+            type='text' 
+            text='Nome do Projeto' 
+            name='name'
+            handleOnChange={handleChange}
+            placeholder='Insira o nome do projeto'
+           />
+            <Input 
+            type='number' 
+            text='Orçamento do Projeto' 
+            name='budget'
+            handleOnChange={handleChange}
+            placeholder='Insira o orçamento total'
+           />
+           <Select 
+            name='category_id' 
+            text='Selecione a categoria'
+            options={categories}
+           />
+           <SubmitButton text={btnText} handleSubmit={handleSubmit}/>
+        </form>
+    )
+}
+
+```
+
+Lembrando que já setamos esse evento `onChange()` lá no nosso arquivo "input.jsx".
+
+```jsx
+
+import styles from './Input.module.css'
+
+export function Input({type,text,name,placeholder,handleOnChange,value}){
+    return (
+       <div className={styles.form_control}>
+        <label htmlFor={name}>{text}</label>
+        <input 
+            type={type}
+            name={name} 
+            id={name}
+            value={value}
+            placeholder={placeholder}
+            onChange={handleOnChange}
+        />
+       </div>
+    )
+}
+
+```
+
+Tendo feito isso, vamos criar outro método, mas agora para captar as categorias, quando as selecionarmos.
+
+```jsx
+
+ const handleCategory = (e) => {
+    setProject({...project, category:{
+      id: e.target.value, // valor do input
+      name: e.target.options[e.target.selectedIndex].text, // Conseguiremos acessar qual opção do select foi acessada pelo index. Já sabendo a opção, acessaremos o seu text.
+    },
+  })
+}
+
+/* 
+
+Essa estrutura de pegar objeto com objeto com `handleCategory` é o ideal trabalhar com o banco de dados mongoDB.
+
+*/
+
+...
+
+<Select 
+  name='category_id' 
+  text='Selecione a categoria'
+  options={categories}
+  handleOnChange={handleCategory}
+  value={project.category ? project.category.id: ''} // Se existir algo dentro do array de projects referente as categorias, selecione o id, caso não, deixe em branco.
+ />
+
+```
+
+Lembre-se de atualizar no arquivo de `Select.jsx`.
+
+```jsx
+
+import styles from './Select.module.css'
+
+export function Select({text,name,options,handleOnChange,value}){
+  return (
+    <div className={styles.form_control}>
+    <label htmlFor={name}>{text}:</label>
+    <select 
+      name={name} 
+      id={name} 
+      onChange={handleOnChange} 
+      value={value || ''} // conexão do value
+    >
+      <option>Selecione uma opção</option>
+      {
+        options.map((option) => (
+          <option value={option.id} key={option.id}>{option.name}</option>
+        ))
+      }
+    </select>
+    </div>
+  )
+}
+
+```
+
+Nesse caso, quando inserimos um value na tag <select> como uma prop e estamos usando o valor dessa prop, então precisamos ao chamar esse componente passar esse "value", se não ele não vai se achar. 
+
+Por isso, que quando tentamos selecionar, embora vissemos os valores, não conseguiamos selecioná-lo, porque o sistema em si não estava os interpretando com os nossos valores.
+
+Agora, isso é diferente no caso dos inputs que eu posso ou não colocar e se tiver vazio esse campo o input deixa vazio e não dá nenhum tipo de erro em si. 
+
+```jsx
+<Input 
+  type='text' 
+  text='Nome do Projeto' 
+  name='name'
+  value={project.name ? project.name : ''}
+  placeholder='Insira o nome do projeto'
+  handleOnChange={handleChange}
+/>
+<Input 
+  type='number' 
+  text='Orçamento do Projeto' 
+  name='budget'
+  value={project.budget ? project.budget : ''}
+  placeholder='Insira o orçamento total'
+  handleOnChange={handleChange}
+/>
+
+```
+
+A modificação dos dados, no caso, sua inserção acontece por meio da função `submit`.
+
+```jsx
+
+const submit = (e) => {
+  e.preventDefault() // cancela o reload e possível perda de dados nos inputs
+  handleSubmit(project)  // Essa parte se conecta com o nosso banco, mudando automaticamente os dados.
+  console.log(project)
+}
+
+```
+
+Com isso pronto, quando dê sucesso na adição de novos projetos vamos adicionar ele em outra página, ou seja, vamos redirecionar para outra página.
+
+```jsx
+
+import { useNavigate  } from 'react-router-dom'
+import { ProjectForm } from '../project/ProjectForm'
+import styles from './NewProject.module.css'
+
+export function NewProject(){
+
+    const history = useNavigate()
+
+    function createPost(project){
+
+        // initialize cost and services
+        project.cost = 0
+        project.services = []
+
+        fetch('http://localhost:5000/projects',{
+            method: 'POST',
+            headers:{
+                'Content-Type':"application/json"
+            },
+            body: JSON.stringify(project)
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            // redirect
+            history('/projects',{ message:'Projeto criado com sucesso!'})
+            console.log(data)
+        })
+        .catch((e) => console.log(e))
+    }
+
+    return(
+        <div className={styles.newproject_container}>
+            <h1>Criar Projeto</h1>
+            <p>Crie seu projeto para depois adicionais os serviços</p>
+            <ProjectForm handleSubmit={createPost} btnText="Criar projeto"/>
+        </div>
+    )
+}
+
+```
