@@ -755,3 +755,98 @@ export function Home(){
 }
 
 ```
+
+## Página para o formulário de projeto 
+
+Para isso, vamos editar o nosso arquivo `NewProject.jsx` que já criamos e estilizá-lo.
+
+- **NewProject.jsx** 
+
+```jsx
+
+import styles from './NewProject.module.css'
+
+export function NewProject(){
+    return(
+        <div className={styles.newproject_container}>
+            <h1>Criar Projeto</h1>
+            <p>Crie seu projeto para depois adicionais os serviços</p>
+            <p>Formulário</p>
+        </div>
+    )
+}
+
+```
+
+- **NewProject.module.css**
+
+```css
+
+.newproject_container{
+    width: 450px;
+    margin: 0 auto;
+    padding: 3em;
+}
+
+.newproject_container h1{
+    margin-bottom: 0.5em;
+}
+
+.newproject_container p{
+    color: #7b7b7b;
+}
+
+```
+
+Precisamos também criar uma pasta chamada `Project` para abrigar o nosso servidor e todos os componentes referentes a ele.
+
+Nele, inicialmente, vamos criar o componente `ProjectForm.jsx` para fazermos o formulário de criação do projeto e depois importá-lo para dentro do nosso arquivo `NewProject`.
+
+- **ProjectForm.jsx**
+
+Inicialmente, ele só terá essa aparência básica. Vamos deixar ele todo estruturado para depois o componentizarmos a nível de inputs, então por agora vamos os criar só por marcação, abstraindo os componentes.
+
+```jsx
+
+export function ProjectForm(){
+    return (
+        <form>
+           <div>
+             <input type="text" placeholder="Insira o nome do projeto"/>
+           </div>
+           <div>
+            <input type="number" placeholder="Insira o orçamento total"/>
+           </div>
+           <div>
+            {/* Categoria dos Projetos */}
+            <select name="category_id">
+                <option disabled selected>Selecione a categoria</option>
+            </select>
+           </div>
+           <div>
+            <input type="submit" value="Criar Projeto"/>
+           </div>
+        </form>
+    )
+}
+
+```
+
+- **NewProject.jsx**
+
+```jsx
+
+import { ProjectForm } from '../project/ProjectForm'
+import styles from './NewProject.module.css'
+
+export function NewProject(){
+    return(
+        <div className={styles.newproject_container}>
+            <h1>Criar Projeto</h1>
+            <p>Crie seu projeto para depois adicionais os serviços</p>
+            <ProjectForm/>
+        </div>
+    )
+}
+
+```
