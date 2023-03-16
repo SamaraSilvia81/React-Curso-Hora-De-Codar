@@ -628,3 +628,130 @@ function App() {
 export default App
 
 ```
+
+## Criando a Home
+
+Vamos criar a nossa landing page, ou seja, apenas uma página inicial do nosso projeto.
+
+- **Home.jsx**
+
+```jsx
+
+import styles from './Home.module.css'
+import savings from '../../img/savings.svg'
+
+export function Home(){
+    return(
+        <section className={styles.home_container}>
+            <h1>Bem-vindo ao <span>Costs</span></h1>
+            <p>Comece a gerenciar os seus projetos agora mesmo!</p>
+            <a href=''>Criar Projeto</a>
+            <img src={savings} alt='Costs'></img>
+        </section>
+    )
+}
+
+```
+
+E já vamos estilizar nossa página.
+
+- **Home.module.css**
+
+```css
+
+.home_container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centralizar na vertical */
+    justify-content: center; /* Centralizar na horizontal */
+    padding: 4em;
+}
+
+.home_container h1{
+   font-size: 2.5em;
+   margin-bottom: .5em;
+}
+
+.home_container h1 span{
+    color: #ffbb33;
+    padding: 0.2em;
+    background-color: #222;
+}
+
+.home_container p{
+    margin-bottom: 1.5em;
+    color:#7b7b7b;
+}
+
+.home_container img{
+    width: 350px;
+    margin: 2em 0;
+}
+
+```
+
+Colocamos uma tag <a> de ancoragem apenas de referência, porque na verdade esse link será um componente que iremos utilizar algumas vezes.
+
+Então, na pasta de "layout" vamos criar um componente dito como `LinkButton.jsx`.
+
+- **LinkButton.jsx**
+
+Vamos estar dinamificando o endereço da lincagem e o texto.
+
+- `to` é a props referente a pra onde vamos.
+- `text` baseado em onde vamos utilizar ele.
+
+```jsx
+
+import { Link } from 'react-router-dom'
+import styles from './LinkButton.module.css'
+
+export function LinkButton({to,text}){
+    return(
+        <Link className={styles.btn} to={to}>
+            {text}
+        </Link>
+    )
+}
+
+```
+
+- **LinkButton.module.css**
+
+```css
+
+.btn{
+    background-color: #222;
+    color:#fff;
+    padding: 0.5em 1em ;  /*Estilo de botão - Menor na vertical e maior na horizontal*/
+    font-size: 1.2em;
+    text-decoration: none;
+    transition: 0.5s;
+}
+
+.btn:hover{
+    color: #ffbb33
+}
+
+```
+
+- **Home.jsx**
+
+```jsx
+import { LinkButton } from '../layout/LinkButton'
+import styles from './Home.module.css'
+import savings from '../../img/savings.svg'
+
+export function Home(){
+    return(
+        <section className={styles.home_container}>
+            <h1>Bem-vindo ao <span>Costs</span></h1>
+            <p>Comece a gerenciar os seus projetos agora mesmo!</p>
+            <LinkButton to='/newproject' text='Criar Projeto'/>
+            <img src={savings} alt='Costs'></img>
+        </section>
+    )
+}
+
+```
