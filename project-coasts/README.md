@@ -1153,4 +1153,171 @@ export function ProjectForm({btnText}){
 
 ```
 
-Se vocês notarem existe uma relação de props entre - LinkButton - que importa - NewProject - que import - ProjectForm - que possue uma prop para o componente - SubmitButton - que também tem uma prop que receberá como valor o que foi escrito em - ProjectForm -. 
+Se vocês notarem existe uma relação de props entre - LinkButton - que importa - NewProject - que import - ProjectForm - que possue uma prop para o componente - SubmitButton - que também tem uma prop que receberá como valor o que foi escrito em - ProjectForm -.
+
+## Conexão da API com React
+
+Agora que já criamos a base estrutural do nosso formulário e o componentizamos, vamos criar um sistema para inserção de dados.
+
+Para isso, precisaremos criar uma API com um servidor em formato JSON, porque é mais simples de manipular. Logo, vamos começar a aplicar o JS no nosso projeto.
+
+## Criando API no React 
+
+> Para criação da nossa API vamos estar utilizando o JSON.sever, simulando o back-end no front-end.
+
+Para tanto, vamos estar criando um arquivo dentro do src chamado `db.json`.
+
+```json
+
+{
+  "projects": []
+}
+
+```
+
+Quando fazemos isso, já conseguimos acessar uma página que contém esse dados. Mas para rodarmos o nosso backend precisamos configurar a sua chamada no terminal.
+
+```json
+
+"scripts": {
+  "dev": "vite", // npm run dev
+  "backend":"json-server --watch db.json --port 5000",
+  "build": "vite build",
+  "preview": "vite preview"
+},
+
+```
+
+Isso aqui, é um mecanismo para facilitar a chamada, porque ao invés de executarmos "json-server...", só precisamos rodar no terminal `npm run backend`.
+
+- **db.json**
+
+```json
+
+{
+  "projects":[],
+  "categories":[
+      {
+          "id": 1,
+          "name": "Infraestrutura"
+      },
+      {
+          "id": 2,
+          "name": "Desenvolvimento"
+      },
+      {
+          "id": 3,
+          "name": "Design"
+      },
+      {
+          "id": 4,
+          "name": "Planejamento"
+      }
+  ]
+}
+
+```
+
+```jsx
+
+ const [categories, setCategories] = useState([]);
+
+    fetch("http://localhost:5000/categories",{
+        method: 'GET',
+        headers:{
+            'Content-Type':"application/json"
+        }
+    })
+    .then((res) => res.json())  // promise
+    .then((data) => {
+        setCategories(data)
+    })
+    .catch((e) => console.log(err))
+
+```
+
+Fizemos um request com fetchAPI para a URl categories, pegando os dados que estão lá em JSON e colocando dentro do nosso state.
+
+Como temos as categorias podemos mandá-las para o nosso select.
+
+```jsx
+
+import styles from './Select.module.css'
+
+export function Select({text,name,options,handleOnChange,value}){
+    return (
+       <div className={styles.form_control}>
+        <label htmlFor={name}>{text}:</label>
+        <select name={name} id={name}>
+            <option>Selecione uma opção</option>
+            {
+                options.map((option) => (
+                    <option value={option.id} key={option.id}>{option.name}</option>
+                ))
+            }
+        </select>
+       </div>
+    )
+}
+
+```
+
+O processo de mapeamento seleciona individualmente cada categoria que criamos.
+
+Para exibirmos os dados, os nomes das categorias, fizemos `option.name`. Porque, é assim que acessamos o valor de um chave de um objeto.
+
+Detalhe, o terminal precisa está aberto para se ter a conexão com os nossos dados. No entanto, as requisições estão acontecendo a todo momento, em um loop infinito. Para rompermos com isso, iremos precisar usar um outro estado que permite que seja renderizado apenas um única vez no nosso site `useEffect()`.
+
+```jsx
+
+import { useState, useEffect } from 'react'
+
+import {Input} from '../form/Input'
+import {Select} from '../form/Select'
+import {SubmitButton} from '../form/SubmitButton'
+
+import styles from './ProjectForm.module.css'
+
+export function ProjectForm({btnText}){
+
+    const [categories, setCategories] = useState([]);
+
+    useEffect(() => {
+        fetch("http://localhost:5000/categories",{
+        method: 'GET',
+        headers:{
+            'Content-Type':"application/json"
+        }
+    })
+        .then((res) => res.json())
+        .then((data) => {
+            setCategories(data)
+        })
+        .catch((e) => console.log(err))
+    },[])
+
+    return (
+        <form className={styles.form}>
+           <Input 
+            type='text' 
+            text='Nome do Projeto' 
+            name='name'
+            placeholder='Insira o nome do projeto'
+           />
+            <Input 
+            type='number' 
+            text='Orçamento do Projeto' 
+            name='name'
+            placeholder='Insira o orçamento total'
+           />
+           <Select 
+            name='category_id' 
+            text='Selecione a categoria'
+            options={categories}
+           />
+           <SubmitButton text={btnText}/>
+        </form>
+    )
+}
+
+```
