@@ -1344,7 +1344,7 @@ import styles from './NewProject.module.css'
 
 export function NewProject(){
 
-    const history = useNavigate ()
+    const navigate = useNavigate ()
 
     function createPost(project){
         // initialize cost and services
@@ -1373,7 +1373,7 @@ import styles from './NewProject.module.css'
 
 export function NewProject(){
 
-    const history = useNavigate ()
+    const navigate = useNavigate ()
 
     function createPost(project){
 
@@ -1845,7 +1845,7 @@ import styles from './NewProject.module.css'
 
 export function NewProject(){
 
-    const history = useNavigate()
+    const navigate = useNavigate()
 
     function createPost(project){
 
@@ -1863,7 +1863,7 @@ export function NewProject(){
         .then((res) => res.json())
         .then((data) => {
             // redirect
-            history('/projects',{ message:'Projeto criado com sucesso!'})
+            navigate('/projects',{ message:'Projeto criado com sucesso!'})
             console.log(data)
         })
         .catch((e) => console.log(e))
@@ -1883,3 +1883,192 @@ export function NewProject(){
 Antes de irmos para a próxima etapa do projeto, é importante destacar a seguinte lógica: 
 
 Quando não tinhámos o evento `onChange()`, a gente só estava aplicando a ideia de enviar dados com o `submit`, mas os dados em si não estavam sendo enviados (só estava ativando o evento), porque o `submit` não captava os values dos inputs e select. Por isso, que implementamos esse outro método.
+
+## Mensagens do Sistema
+
+Nesta parte do projeto, vamos estar inserindo a lógica de mensagens do nosso sistema. Essa lógica, estará sendo aplicada quando a nossa página for renderizada para a página "/projects".
+
+Agora, não utilizaremos apenas uma única mensagem, mas várias, então podemos componentizar também essa questão no arquivo `Projects.jsx`.
+
+- **NewProject.jsx**
+
+```jsx
+
+.then((data) => {
+    // redirect
+    navigate('/projects',{ message:'Projeto criado com sucesso!'})
+    console.log(data)
+})
+
+```
+
+Aqui, a mensagem está sendo semi-enviada, mas usaremos essa parte do código terá que ser impresso na página de projetos ('/projects'), porque é para onde está indo o navigate.
+
+Para isso, vamos criar um arquivo na pasta "layout" dito como `Message.jsx`.
+
+```jsx
+
+import styles from './Message.module.css';
+
+export function Message({type,msg}){
+    return (
+       <div className={`${styles.message} ${styles[type]}`}>{msg}</div>
+    )
+}
+
+// Type = Sucesso, Error...
+
+```
+
+Como podem vê estamos usando, novamente, a lógica de classe dinâmica, ou seja, uma classe será fixa (styles.message) e outra virá das propriedades (styles[type]).
+
+- **Message.module.css**
+
+```css
+
+.message{
+    width: 100%;
+    padding: 1em;
+    border: 1px solid #000;
+    margin: 0 auto;
+    text-align: center;
+    margin-bottom: 2em;
+    border-radius: 5px;
+}
+
+.sucess{
+    color: #155724;
+    background-color: #d4edda ;
+    border-color: #c3e6cb;
+}
+
+.error{
+    color: #721c24;
+    background-color: #f8d7da ;
+    border-color: #f5c6cb;
+}
+
+```
+
+- **Projects** 
+
+```jsx
+
+import {Message} from '../layout/Message';
+
+export function Projects(){
+    return (
+       <div>
+        <h1>Meus Projetos</h1>
+        <Message msg='Alguma Mensagem'/>
+       </div>
+    )
+}
+
+```
+
+O "type" define como a mensagem será impressa. Então, se colocassemos `type='sucess'` a mensagem apareceria verdinha e afins, baseada nas configurações que fizemos.
+
+Vamos criar um "state" do tempo que a mensagem será exibida, a depender de alguma condição.
+
+Vamos usar o conceito de "fragments", porque a div que temos é o elemento pai, então com esse recurso poderemos usar esse state da seguinte forma:
+
+- **Message.jsx**
+
+```jsx
+
+import { useState, useEffect } from 'react';
+
+import styles from './Message.module.css';
+
+export function Message({type,msg}){
+
+    const [visible,setVisible] = useState(false)
+
+    return (
+        <>
+            {visible && (
+                <div className={`${styles.message} ${styles[type]}`}>{msg}</div>
+            )}
+       </>
+    )
+}
+
+```
+
+Se o estado da mensagem estiver 'true', ativado, então exibirá a estrutura da nossa mensagem, caso não...
+
+Tendo feito isso, vamos usar o `useEffect()` para fazermos o nosso timer de exibição a depender da condição que nesse caso é a mensagem.
+
+```jsx
+
+useEffect(() => {
+
+    if(!msg){
+        setVisible(false)
+        return
+    }
+
+    setVisible(true);
+
+    const timer = setTimeout(() => {
+        setVisible(false)
+    }, 3000)
+
+    return () => clearTimeout(timer)
+
+},[msg])
+
+```
+
+Com o `setTimeout()` estamos dizendo que após 3s a mensagem voltará ao seu estado inicial de exibição, ou seja, false.
+
+E para sempre estar retornando algo e não der um erro, não apenas limpamos (cancelamos) a chamado do timeout.
+
+Pela lógica que está agora, sempre vai dar sucesso, mas não se preocupe, depois vamos implementar a noção de error.
+
+Um outro ponto, é que precisamos também dinamizar a mensagem em si, não a deixando fixa. Para isso, vamos usar um hook chamado `useLocation()` para estarmos localizando a "message" do navigate.
+
+- **Projects.jsx**
+
+```jsx
+
+import {Message} from '../layout/Message';
+import { useLocation  } from 'react-router-dom'
+
+export function Projects(){
+
+    const location = useLocation()
+    let message = ''
+
+    if(location.state){
+        message = location.state.message
+    }
+
+    return (
+       <div>
+        <h1>Meus Projetos</h1>
+        {
+            message && <Message type='sucess' msg={message} />
+        }
+       </div>
+    )
+}
+
+```
+
+Além disso, estaremos também condionando o nosso componente mensagem, pois se o location encontrar a variável "message" com algo dentro la do navigate, então ele exibirá o componente.
+
+Uma alteração importante !!! A forma como colocamos o nosso `useNavigate()` estava no antigo formato quando antes era `usenavigate()`, então precisamos deixar assim:
+
+- **Projects.jsx**
+
+```jsx
+
+const navigate = useNavigate()
+
+// redirect
+navigate('/projects',{state:{ message:'Projeto criado com sucesso!'}})
+console.log(data)
+
+```

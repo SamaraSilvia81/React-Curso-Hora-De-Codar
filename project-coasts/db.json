@@ -119,6 +119,28 @@
       "cost": 0,
       "services": [],
       "id": 12
+    },
+    {
+      "name": "TesteLocation",
+      "budget": "2345",
+      "category": {
+        "id": "1",
+        "name": "Infraestrutura"
+      },
+      "cost": 0,
+      "services": [],
+      "id": 13
+    },
+    {
+      "name": "TesteLocationNavigate",
+      "budget": "4647",
+      "category": {
+        "id": "1",
+        "name": "Infraestrutura"
+      },
+      "cost": 0,
+      "services": [],
+      "id": 14
     }
   ],
   "categories": [
