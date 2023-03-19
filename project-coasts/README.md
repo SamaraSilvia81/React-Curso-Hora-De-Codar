@@ -2072,3 +2072,65 @@ navigate('/projects',{state:{ message:'Projeto criado com sucesso!'}})
 console.log(data)
 
 ```
+
+## Criando Dashboard
+
+Nessa aula, vamos nos concentar em chamar os projetos criados como cards na nossa página de projetos.
+
+- **Projects.jsx** 
+
+```jsx
+
+import { useLocation  } from 'react-router-dom'
+
+import {Message} from '../layout/Message';
+import {Container} from '../layout/Container';
+import {LinkButton} from '../layout/LinkButton';
+
+import styles from './Projects.module.css';
+
+export function Projects(){
+
+    const location = useLocation()
+    let message = ''
+
+    if(location.state){
+        message = location.state.message
+        console.log(location)
+    }
+
+    return (
+       <div className={styles.project_container}>
+        <div className={styles.title_container}>
+            <h1>Meus Projetos</h1>
+            <LinkButton to='/newproject' text='Novo Projeto'/>
+        </div>
+        { message && <Message type='sucess' msg={message} />}
+       <Container customClass='start'>
+        <p>Projetos...</p>
+       </Container>
+       </div>
+    )
+}
+
+```
+
+Tirando a configuração básica que estava antes, vamos estar adicionando o nosso componente `container`, apenas por requisitos de estilos. 
+
+E também, além do título "Meus Projetos", estaremos nessa página colocando um botão, ele vindo como um componente pronto, para levar o usuário até a página de criação de projetos.
+
+- **Projects.module.css** 
+
+```css
+
+.project_container{
+    padding: 2em; /* espaçamento interno dos elementos */
+}
+
+.title_container{
+    display: flex; /* cada elemento um do lado do outro */
+    justify-content: space-between; /* espaçamento lateral igual entre os elementos*/
+    margin-bottom: 2m;
+}
+
+```
