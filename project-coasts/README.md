@@ -1218,6 +1218,8 @@ Isso aqui, é um mecanismo para facilitar a chamada, porque ao invés de executa
 
 ```
 
+- **ProjectForm.jsx**
+
 ```jsx
 
  const [categories, setCategories] = useState([]);
@@ -1324,17 +1326,13 @@ export function ProjectForm({btnText}){
 
 ## Inserindo os dados no API
 
-Tendo feito a conexão com API, criando o nosso banco de dados com "Json.server" e imprimimo as opções do select no nosso front. Agora vamos inserir os dados na nossa API.
+Tendo feito a conexão com API, criando o nosso banco de dados com `Json.server` e imprimimo as opções do select no nosso front. Agora vamos inserir os dados na nossa API.
 
-Para não poluirmos o nosso componente de form, vamos no componente pai - newProject - e colocaremos os metódos lá.
+Para não poluirmos o nosso componente de form, vamos no componente pai - `newProject.jsx` - e colocaremos os metódos lá.
 
-Antes de tudo, vamos estar importando um outro hook chamado `useNavigate()`, no qual nos permite fazer um redirect nas páginas do nosso sistema. Ele permite o redirecionamento do usuário quando precisarmos, no caso, quando der um "post" ele poderá redirecionar para outra página.
+Antes de tudo, vamos estar importando um outro hook chamado `useNavigate()`, no qual nos permite fazer um redirect nas páginas do nosso sistema. Ele permite o redirecionamento do usuário quando precisarmos, no caso, quando der um `post` ele poderá redirecionar para outra página.
 
 - **NewProject.jsx**
-
-```jsx
-
-```
 
 Os projetos terão atributos que inicialmente serão zerados, visto que serão atualizados ao longo do sistema.
 
@@ -1408,9 +1406,9 @@ export function NewProject(){
 
 ```
 
-Tendo passado a prop, vamos aceitá-la no nosso arquivo - ProjectForm -.
+Tendo passado a prop, vamos aceitá-la no nosso arquivo - `ProjectForm.jsx` -.
 
-Além da nossa função, iremos passar os dados dos projetos `ProjectData` também, isso pois quando enviarmos esses dados para edição teremos que passar pela página pai, então precisamos vê se esses dados estão vindo ou não para inicializarmos eles ou não.
+Além da nossa função, iremos passar os dados dos projetos `ProjectData` também, isso pois quando enviarmos esses dados para edição teremos que passar pela página pai (newProject), então precisamos vê se esses dados estão vindo ou não para inicializarmos eles ou não.
 
 ```jsx
 
@@ -1426,6 +1424,8 @@ export function ProjectForm({btnText, handleSubmit, projectData}){
 
     const [categories, setCategories] = useState([]);
     const [project, setProject] = useState(projectData || {});
+
+    // Quando fizermos o formulário de edição, ele irá verificar se já tem algum dado para editar, caso não..., não haverá nada a editar.
 
     useEffect(() => {
         fetch("http://localhost:5000/categories",{
@@ -1452,7 +1452,7 @@ export function ProjectForm({btnText, handleSubmit, projectData}){
             <Input 
             type='number' 
             text='Orçamento do Projeto' 
-            name='name'
+            name='budget'
             placeholder='Insira o orçamento total'
            />
            <Select 
@@ -1467,7 +1467,15 @@ export function ProjectForm({btnText, handleSubmit, projectData}){
 
 ```
 
-Vamos criar também um método para enviar os nosso dados, ou seja, fazer o "submit".
+Tendo já recebido o evento `handleSubmit`, precisamos criar um método para enviar os nossos dados, ou seja, fazer o `submit`.
+
+No caso, pense da seguinte forma:
+- Na tag <form> temos inputs, select e um button;
+- Button: Vai receber uma prop dita `handleSubmit` que por sua vez se conecta com o componente pai, ativando a função `createPost`.
+
+Porém, até agora só: Clicamos no botão --> Ativou o método Post.
+
+Precisamos ainda, enviar os nossos dados para o nosso back-end e também captar esses dados para que seja enviado de fato algo. Focando-se nessa primeira parte do envio, vamos criar esse método `submit`.
 
 ```jsx
 
@@ -1499,8 +1507,8 @@ export function ProjectForm({btnText, handleSubmit, projectData}){
     },[])
 
     const submit = (e) => {
-        e.preventDefault();
-        handleSubmit(project)
+        e.preventDefault(); //não deixamos o formulário ser enviado com um page reload()
+        handleSubmit(project) // executamos o método que foi passado pela prop e passo como argumento o array com os dados dos projetos cadastrados. 
     }
 
     return (
@@ -1514,7 +1522,7 @@ export function ProjectForm({btnText, handleSubmit, projectData}){
             <Input 
             type='number' 
             text='Orçamento do Projeto' 
-            name='name'
+            name='budget'
             placeholder='Insira o orçamento total'
            />
            <Select 
@@ -1531,7 +1539,94 @@ export function ProjectForm({btnText, handleSubmit, projectData}){
 
 Dessa forma, vamos executar o método que foi passado como prop (handleSubmit) e passamos o projeto que está cadastrado no nosso formulário como argumento (projectData).
 
-Mas precisamos também atualizar o state do projeto, assim teremos dois métodos. O do `submit` e o `handleChange`.
+Certo, mas você pode se perguntar: "Eu não preciso alterar o meu componente `SubmitButton` para receber esse `submit`? Como que eu envio os dados se eu não atribui a esse button, por exemplo, o evento de onClick? 
+
+⚜ **Dica:** Caso tenha dúvida quanto ao papel do `submit` no form e o impacto que ele traz no botão `SubmitButton` saiba o seguinte: Você naõ precisa alterar o componente `SubmitButton`, inserindo nele em si uma props para recber o `handleSubmit`e até colocar o evento de onClick, porque quando um formulário é submetido no React, o evento `onSubmit` é acionado automaticamente quando o botão dentro do formulário é clicado. É algo padrão do react, o próprio evento `onSubmit` fica esperando "ouvir" o evento de click. Agora, se atribuíssemos o submit no botão, precisariamos sim alterar manualmente o componente, por exemplo, da seguinte forma: 
+
+- **SubmitButton.jsx**
+
+```jsx
+// Evento onClick precisaria ser acionado para pudesse dar certo essa lógica agora
+
+import styles from './SubmitButton.module.css'
+
+export function SubmitButton({text, handleSubmit}){
+    return (
+       <div className={styles.form_control}>
+       <button className={styles.btn} onClick={handleSubmit}>{text}</button>
+       </div>
+    )
+}
+
+// Se você colocasse onSubmit seria preciso que o método submit estivesse aqui, ficando:
+
+export function SubmitButton({text, handleSubmit}){
+
+    const handleClick = (e) => {
+        e.preventDefault()
+        handleSubmit()
+        console.log('Enviando os dados...')
+    }
+    
+    return (
+       <div className={styles.form_control}>
+       <button className={styles.btn} onClick={handleClick}>{text}</button>
+       </div>
+    )
+}
+
+```
+
+- **ProjectForm.jsx**
+
+```jsx
+// Exemplo do Form e Button
+// onSubmit estaria no botão e não no form
+
+return (
+<form className={styles.form}>
+    <Input 
+    type='text' 
+    text='Nome do Projeto' 
+    name='name'
+    placeholder='Insira o nome do projeto'
+    value={project.name ? project.name : ''}
+    handleOnChange={handleChange}
+    />
+    <Input 
+    type='number' 
+    text='Orçamento do Projeto' 
+    name='budget'
+    placeholder='Insira o orçamento total'
+    value={project.budget ? project.budget : ''}
+    handleOnChange={handleChange}
+    />
+    <Select 
+    name='category_id' 
+    text='Selecione a categoria'
+    options={categories}
+    handleOnChange={handleCategory}
+    value={project.category ? project.category.id: ''}
+    />
+    <SubmitButton text={btnText} handleSubmit={submit}/>
+</form>
+)
+
+// Se você colocasse onSubmit seria preciso que o método submit estivesse aqui, ficando:
+
+const handleFormSubmit = () => {
+    handleSubmit(project)
+}
+
+<SubmitButton text={btnText} handleSubmit={handleFormSubmit}/>
+
+```
+
+Agora, é interessante pontuar que mesmo fazendo tudo isso nada está sendo de fato enviado. Isso pois, precisamos de um evento para captar a mudança do estado dos inputs e selects, no caso precisamos aplicar o event `onChange`.
+
+Nesse caso, precisamos atualizar o state do projeto, assim teremos agora dois métodos: O do `submit`, contendo a ideia de enviar os dados e o `handleChange`, método para captar os dados que serão enviados.
+
+- **ProjectForm.jsx** 
 
 ```jsx
 
@@ -1545,7 +1640,7 @@ Nessa segunda função, iremos alterar o nome do projeto. Para isso, faremos um 
 
 E diremos que o nome do input que é o name do projeto ou budget será igual ao value do input.
 
-Assim, independente do input que preenchermos vai mudar alguma propriedade que foi de texto. 
+Assim, independente do input que preenchermos vai mudar alguma propriedade que foi de texto, isso porque vamos passar a mesma props para ambos os inputs, então se eu digitar em um ou em ambos vai estar dentro do meu array `project`.
 
 Tendo feito isso, vamos adicionar esse método como um atributo dos nossos inputs. Dessa forma, poderemos pegar os dados que serão digitados e consequentemente enviar.
 
@@ -1616,7 +1711,7 @@ export function ProjectForm({btnText, handleSubmit, projectData}){
 
 ```
 
-Lembrando que já setamos esse evento `onChange()` lá no nosso arquivo "input.jsx".
+Lembrando que já setamos esse evento `onChange()` lá no nosso arquivo `input.jsx`.
 
 ```jsx
 
@@ -1699,13 +1794,16 @@ export function Select({text,name,options,handleOnChange,value}){
 
 ```
 
-Nesse caso, quando inserimos um value na tag <select> como uma prop e estamos usando o valor dessa prop, então precisamos ao chamar esse componente passar esse "value", se não ele não vai se achar. 
+Nesse caso, quando inserimos um value na tag <select> como uma prop e estamos usando o valor dessa prop, então precisamos ao chamar esse componente passar esse `value`, se não ele não vai se achar. 
 
 Por isso, que quando tentamos selecionar, embora vissemos os valores, não conseguiamos selecioná-lo, porque o sistema em si não estava os interpretando com os nossos valores.
 
 Agora, isso é diferente no caso dos inputs que eu posso ou não colocar e se tiver vazio esse campo o input deixa vazio e não dá nenhum tipo de erro em si. 
 
+- **ProjectForm.jsx**
+
 ```jsx
+
 <Input 
   type='text' 
   text='Nome do Projeto' 
@@ -1780,4 +1878,8 @@ export function NewProject(){
     )
 }
 
-```
+``` 
+
+Antes de irmos para a próxima etapa do projeto, é importante destacar a seguinte lógica: 
+
+Quando não tinhámos o evento `onChange()`, a gente só estava aplicando a ideia de enviar dados com o `submit`, mas os dados em si não estavam sendo enviados (só estava ativando o evento), porque o `submit` não captava os values dos inputs e select. Por isso, que implementamos esse outro método.

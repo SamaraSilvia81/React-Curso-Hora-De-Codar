@@ -7,7 +7,7 @@ import {SubmitButton} from '../form/SubmitButton'
 import styles from './ProjectForm.module.css'
 
 export function ProjectForm({btnText, handleSubmit, projectData}){
-
+    
     const [categories, setCategories] = useState([]);
     const [project, setProject] = useState(projectData || {});
 
@@ -28,6 +28,7 @@ export function ProjectForm({btnText, handleSubmit, projectData}){
     const submit = (e) => {
         e.preventDefault()
         handleSubmit(project)
+        console.log('Enviando os dados...')
         //console.log(project)
     }
 
@@ -50,16 +51,16 @@ export function ProjectForm({btnText, handleSubmit, projectData}){
             type='text' 
             text='Nome do Projeto' 
             name='name'
-            value={project.name ? project.name : ''}
             placeholder='Insira o nome do projeto'
+            value={project.name ? project.name : ''}
             handleOnChange={handleChange}
            />
            <Input 
             type='number' 
             text='Orçamento do Projeto' 
             name='budget'
-            value={project.budget ? project.budget : ''}
             placeholder='Insira o orçamento total'
+            value={project.budget ? project.budget : ''}
             handleOnChange={handleChange}
            />
            <Select 

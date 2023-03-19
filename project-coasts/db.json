@@ -10,6 +10,115 @@
       "cost": 0,
       "services": [],
       "id": 1
+    },
+    {
+      "category": {
+        "id": "1",
+        "name": "Infraestrutura"
+      },
+      "name": "Projeto Costs",
+      "budget": "3450",
+      "cost": 0,
+      "services": [],
+      "id": 2
+    },
+    {
+      "name": "asdas",
+      "budget": "23234",
+      "category": {
+        "id": "3",
+        "name": "Design"
+      },
+      "cost": 0,
+      "services": [],
+      "id": 3
+    },
+    {
+      "cost": 0,
+      "services": [],
+      "id": 4
+    },
+    {
+      "name": "Teste",
+      "budget": "4000",
+      "category": {
+        "id": "2",
+        "name": "Desenvolvimento"
+      },
+      "cost": 0,
+      "services": [],
+      "id": 5
+    },
+    {
+      "cost": 0,
+      "services": [],
+      "id": 6
+    },
+    {
+      "name": "teste02",
+      "budget": "46",
+      "category": {
+        "id": "1",
+        "name": "Infraestrutura"
+      },
+      "cost": 0,
+      "services": [],
+      "id": 7
+    },
+    {
+      "name": "teste03",
+      "budget": "344",
+      "category": {
+        "id": "2",
+        "name": "Desenvolvimento"
+      },
+      "cost": 0,
+      "services": [],
+      "id": 8
+    },
+    {
+      "name": "test04",
+      "budget": "4646",
+      "category": {
+        "id": "2",
+        "name": "Desenvolvimento"
+      },
+      "cost": 0,
+      "services": [],
+      "id": 9
+    },
+    {
+      "name": "Test05",
+      "budget": "4567",
+      "category": {
+        "id": "3",
+        "name": "Design"
+      },
+      "cost": 0,
+      "services": [],
+      "id": 10
+    },
+    {
+      "name": "Test06",
+      "budget": "5678",
+      "category": {
+        "id": "4",
+        "name": "Planejamento"
+      },
+      "cost": 0,
+      "services": [],
+      "id": 11
+    },
+    {
+      "name": "Test07",
+      "budget": "1234",
+      "category": {
+        "id": "4",
+        "name": "Planejamento"
+      },
+      "cost": 0,
+      "services": [],
+      "id": 12
     }
   ],
   "categories": [
