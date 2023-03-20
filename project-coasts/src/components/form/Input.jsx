@@ -1,6 +1,6 @@
 import styles from './Input.module.css'
 
-export function Input({ type, text, name, placeholder, handleOnChange, value }) {
+export function Input({ type, text, name,disabled, placeholder, handleOnChange, value }) {
 
     return (
         <div className={styles.form_control}>
@@ -10,6 +10,7 @@ export function Input({ type, text, name, placeholder, handleOnChange, value }) 
                 name={name}
                 id={name}
                 value={value}
+                disabled={disabled}
                 placeholder={placeholder}
                 onChange={handleOnChange}
             />

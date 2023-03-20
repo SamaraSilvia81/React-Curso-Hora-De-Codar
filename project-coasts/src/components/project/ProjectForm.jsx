@@ -11,7 +11,9 @@ export function ProjectForm({btnText, handleSubmit, projectData}){
     const [categories, setCategories] = useState([]);
     const [project, setProject] = useState(projectData || {});
 
-    const [currency, setCurrency] = useState('USD');
+    // Conversão de Moeda
+    const [currency, setCurrency] = useState("BRL");
+    const [convertedBudget, setConvertedBudget] = useState(projectData ? projectData.converted_budget : null);
 
     useEffect(() => {
         fetch("http://localhost:5000/categories",{
@@ -26,17 +28,30 @@ export function ProjectForm({btnText, handleSubmit, projectData}){
         })
         .catch((e) => console.log(e))
     },[])
-    
+
       const submit = (e) => {
         e.preventDefault();
-        handleSubmit(project);
+        handleSubmit({ ...project, converted_budget: convertedBudget });
         console.log('Enviando os dados...');
       };
 
       const handleChange = (e) => {
-        setProject({...project,[e.target.name]: e.target.value})
+        const { name, value } = e.target;
+        setProject({ ...project, [name]: value });
+        const newConvertedBudget = convertCurrency(value, currency);
+        setConvertedBudget(newConvertedBudget);
         console.log(project)
     }
+
+   {/* const handleChange = (e) => {
+        const { name, value } = e.target;
+        setProject({ ...project, [name]: value });
+        if (name === 'budget') {
+          const newConvertedBudget = convertCurrency(value, currency);
+          setConvertedBudget(newConvertedBudget);
+          console.log(project, newConvertedBudget)
+        }
+      };*/}
 
     const handleCategory = (e) => {
         setProject({...project, category:{
@@ -45,13 +60,27 @@ export function ProjectForm({btnText, handleSubmit, projectData}){
         },
       })
     }  
+
+    const handleBudgetChange = (e) => {
+        const budgetValue = e.target.value;
+        setProject({
+        ...project,
+        budget: budgetValue
+        });
+        const newConvertedBudget = convertCurrency(budgetValue, currency);
+        setConvertedBudget(newConvertedBudget);
+        };
     
     const handleCurrencyChange = (e) => {
-        setCurrency(e.target.value);
+        //setCurrency(e.target.value);
+        const newCurrency = e.target.value;
+        setCurrency(newCurrency);
+        const newConvertedBudget = convertCurrency(project.budget, newCurrency);
+        setConvertedBudget(newConvertedBudget);
     };
     
     const convertCurrency = (value, currency) => {
-    const conversionRate = currency === 'BRL' ? 1.0 : 5.0; // exemplo de taxa de conversão
+    const conversionRate = currency === 'BRL' ? 1.0 : 5.25; // exemplo de taxa de conversão
     return parseFloat(value) * conversionRate;
     };
     
@@ -66,7 +95,7 @@ export function ProjectForm({btnText, handleSubmit, projectData}){
             handleOnChange={handleChange}
            />
            <Input 
-            type='text' 
+            type='number' 
             text='Orçamento do Projeto' 
             name='budget'
             placeholder='Insira o orçamento total'
@@ -76,8 +105,8 @@ export function ProjectForm({btnText, handleSubmit, projectData}){
           <label>
                 Moeda:
                 <select value={currency} onChange={handleCurrencyChange}>
-                <option value="USD">Dólar</option>
-                <option value="BRL">Real</option>
+                    <option value="BRL">Real</option>
+                    <option value="USD">Dólar</option>
                 </select>
             </label> 
             <Input
@@ -85,12 +114,14 @@ export function ProjectForm({btnText, handleSubmit, projectData}){
                 text="Orçamento convertido"
                 name="converted_budget"
                 placeholder="Orçamento convertido"
-                value={
+                value={convertedBudget ? convertedBudget : ''}
+                /*value={
                 project.budget
                     ? convertCurrency(project.budget, currency).toFixed(2)
                     : ''
-                }
-                handleOnChange={handleChange}
+                }*/
+                handleOnChange={handleBudgetChange}
+                //disabled={true}
                 readOnly
             />
            <Select 

@@ -32,11 +32,12 @@ export function Projects(){
         .then((res) => res.json())
         .then((data) => {
             console.log(data)
-            setProjects(data)
+            setProjects(data)  
         })
         .catch((e) => console.log(err))  // assim conseguiremos debuggar depois
     },[])  // estaremos controlando um array vazio
 
+    
     return (
        <div className={styles.project_container}>
         <div className={styles.title_container}>
@@ -49,7 +50,8 @@ export function Projects(){
             projects.map((project) => <ProjectCard 
             id={project.id}
             name={project.name}
-            budget={project.budget}
+            budget={project.converted_budget}
+            currency={project.currency}
             category={project?.category?.name}
             key={project.id}
             />))}
