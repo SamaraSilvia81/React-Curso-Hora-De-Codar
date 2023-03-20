@@ -2134,3 +2134,265 @@ E também, além do título "Meus Projetos", estaremos nessa página colocando u
 }
 
 ```
+
+## Resgatando Projetos no Bando de Dados
+
+Após termos configurado a página de projetos, vamos conectar essa parte com o nosso servidor.
+
+Vamos criar um arquivo chamado `ProjectCard` para onde tem <p>Projetos</p> ter essa chamada do componente que pegará todos os projetos que temos no nosso banco de dados.
+
+- **ProjectCard.jsx**
+
+```jsx
+
+import { useLocation  } from 'react-router-dom'
+
+import {BsPencil, BsFillTrashFill} from 'react-icons/bs'
+
+import styles from './ProjectCard.module.css';
+
+export function ProjectCard({id,name,budget,category,handleRemove}){
+
+    return (
+       <p>projetos</p>
+    )
+}
+
+```
+
+Agora precisamos fazer as requisições no componente pai - `Projects.jsx`.
+
+- **Projects.jsx**
+
+```jsx
+
+import { useLocation  } from 'react-router-dom'
+import { useState, useEffect} from 'react';
+
+import {Message} from '../layout/Message';
+import {Container} from '../layout/Container';
+import {LinkButton} from '../layout/LinkButton';
+import {ProjectCard} from '../project/ProjectCard';
+
+import styles from './Projects.module.css';
+
+export function Projects(){
+
+    const [projects, setProjects] = useState([]); // estado para salvar os projetos
+
+    const location = useLocation()
+    let message = ''
+    if(location.state){
+        message = location.state.message
+        console.log(location)
+    }
+
+    // Para buscar todos os projetos
+    // Usamos o useEffect para evitar que loop infinito de requisições
+
+    useEffect(() => {
+        fetch("http://localhost:5000/projects",{
+        method: 'GET',
+        headers:{
+            'Content-Type':"application/json"
+        }
+    })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data)
+            setProjects(data)
+        })
+        .catch((e) => console.log(err))  // assim conseguiremos debuggar depois
+    },[])  // estaremos controlando um array vazio
+
+    return (
+       <div className={styles.project_container}>
+        <div className={styles.title_container}>
+            <h1>Meus Projetos</h1>
+            <LinkButton to='/newproject' text='Novo Projeto'/>
+        </div>
+        { message && <Message type='sucess' msg={message} />}
+       <Container customClass='start'>
+        { projects.length > 0 && (
+            projects.map((project) => <ProjectCard 
+                id={project.id}
+                name={project.name}
+                budget={project.budget}
+                category={project?.category?.name}  // Fazemos isso, porque tem alguns projetos com a categoria indefinida, então o código quebra colocando "?".
+                key={project.id}
+                />))}
+       </Container>
+       </div>
+    )
+}
+
+```
+
+Criamos um `useState` para salvar todos os nossos projetos. Os quais, serão requisitados, por meio do fetch que fizemos dentro do `useEffect`. 
+
+Após isso, na chamada do nosso card, fizemos uma verificação, querendo saber se existe ou não algum projeto dentro do nosso array, se sim, será feito um mapeamento do array e cada projeto será renderizado no nosso componente `ProjectCard`, por meio de suas respectivas props. 
+
+No caso, se eu colocar `budget={project.budget}` eu estarei pegando o orçamento de cada projeto.
+
+Tendo feito isso, vamos configurar melhor o nosso card, para podermos selecionar cada valor seu.
+
+- **ProjectCard.jsx**
+
+```jsx
+
+import { useLocation  } from 'react-router-dom'
+
+import {BsPencil, BsFillTrashFill} from 'react-icons/bs'
+
+import styles from './ProjectCard.module.css';
+
+// Podemos fazer dessa forma 
+export function ProjectCard(props){
+
+    return (
+       <p>{props.name}</p>
+    )
+}
+
+// Mas também podemos chamar diretamente
+export function ProjectCard({id,name,budget,category,handleRemove}){
+
+    return (
+       <p>{name}</p>
+    )
+}
+
+```
+
+Já tendo noção de que os dados estão vindo, vamos configurar melhor esse "html".
+
+- **ProjectCard.jsx**
+
+```jsx
+
+import {BsPencil, BsFillTrashFill} from 'react-icons/bs'
+import styles from './ProjectCard.module.css';
+
+import {Link} from 'react-router-dom'
+
+export function ProjectCard({id,name,budget,category,handleRemove}){
+
+    return (
+       <div className={styles.project_card}>
+        <h4>{name}</h4>
+        <p>
+            <span>Orçamento:</span> R${budget}
+        </p>
+        <p className={styles.category_text}>
+            <span className={`${styles[category?.toLowerCase()]}`}></span> {category}
+        </p>
+        {/*Não vamos atribuir funcionalidade agora, mas ao menos deixaremos a estrutura pronta*/}
+        <div className={styles.project_card_actions}>
+            <Link to='/'>
+                <BsPencil/> Editar
+            </Link>
+            <button>
+                <BsFillTrashFill/> Excluir
+            </button>
+        </div>
+       </div>
+    )
+}
+
+```
+
+- **ProjectCard.module.css**
+
+```css
+
+.project_card{
+    padding: 1em; /* Espaçamento lateral interno*/
+    border: 1px solid #7a7a7a;
+    border-radius: 5px;
+    width: 24%; /* 24% do total disponível - Ele irá se ajustar de acordo com a quantidade de cards*/
+    margin: 0.5%; /*Mantém cada card separado de si*/
+}
+
+.project_card h4{
+    background-color: #222;
+    color: #ffbb33;
+    padding: 0.4em;
+    margin-bottom: 1.3em;
+    font-size: 1.3em;
+}
+
+.project_card p{
+    color: #7a7a7a;
+    margin-bottom: 1em;
+}
+
+.project_card p span{
+    font-weight: bold;
+}
+
+.category_text{
+    display: flex;
+    align-items: center;
+}
+
+.category_text span{
+    display: block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color:#ccc;
+    margin-right: 5px;
+}
+
+.category_text .infraestrutura{
+    background-color: #ffaebc;
+}
+
+.category_text .desenvolvimento{
+    background-color: #a0e7e5;
+}
+
+.category_text .design{
+    background-color: #b4f8c8;
+}
+
+.category_text .planejamento{
+    background-color: #fbe7c6;
+}
+
+/* Estilizamos os botões de editar e remover, mas ainda não lhe atribuímos funcionalidade*/
+
+.project_card_actions{
+    margin-top: 1.2em;
+    display: flex;
+    align-items: center;
+}
+
+.project_card_actions a,
+.project_card_actions button{
+    text-decoration: none;
+    border: none;
+    background-color: #fff;
+    color: #222;
+    font-size: .9em;
+    padding: .6em 1em;
+    margin-right: 1em;
+    cursor: pointer;
+    border: 1px solid #222;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.5s;
+}
+
+.project_card_actions svg{
+    margin-right: 0.5em;
+}
+
+.project_card_actions a:hover,
+.project_card_actions button:hover{
+    background-color: #222;
+    color: #ffbb33;
+}
+
+```

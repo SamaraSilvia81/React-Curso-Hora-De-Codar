@@ -11,6 +11,8 @@ export function ProjectForm({btnText, handleSubmit, projectData}){
     const [categories, setCategories] = useState([]);
     const [project, setProject] = useState(projectData || {});
 
+    const [currency, setCurrency] = useState('USD');
+
     useEffect(() => {
         fetch("http://localhost:5000/categories",{
         method: 'GET',
@@ -22,19 +24,18 @@ export function ProjectForm({btnText, handleSubmit, projectData}){
         .then((data) => {
             setCategories(data)
         })
-        .catch((e) => console.log(err))
+        .catch((e) => console.log(e))
     },[])
+    
+      const submit = (e) => {
+        e.preventDefault();
+        handleSubmit(project);
+        console.log('Enviando os dados...');
+      };
 
-    const submit = (e) => {
-        e.preventDefault()
-        handleSubmit(project)
-        console.log('Enviando os dados...')
-        //console.log(project)
-    }
-
-    const handleChange = (e) => {
+      const handleChange = (e) => {
         setProject({...project,[e.target.name]: e.target.value})
-        //console.log(project)
+        console.log(project)
     }
 
     const handleCategory = (e) => {
@@ -43,8 +44,17 @@ export function ProjectForm({btnText, handleSubmit, projectData}){
           name: e.target.options[e.target.selectedIndex].text,
         },
       })
-    }
-
+    }  
+    
+    const handleCurrencyChange = (e) => {
+        setCurrency(e.target.value);
+    };
+    
+    const convertCurrency = (value, currency) => {
+    const conversionRate = currency === 'BRL' ? 1.0 : 5.0; // exemplo de taxa de conversão
+    return parseFloat(value) * conversionRate;
+    };
+    
     return (
         <form onSubmit={submit} className={styles.form}>
            <Input 
@@ -56,13 +66,33 @@ export function ProjectForm({btnText, handleSubmit, projectData}){
             handleOnChange={handleChange}
            />
            <Input 
-            type='number' 
+            type='text' 
             text='Orçamento do Projeto' 
             name='budget'
             placeholder='Insira o orçamento total'
             value={project.budget ? project.budget : ''}
             handleOnChange={handleChange}
            />
+          <label>
+                Moeda:
+                <select value={currency} onChange={handleCurrencyChange}>
+                <option value="USD">Dólar</option>
+                <option value="BRL">Real</option>
+                </select>
+            </label> 
+            <Input
+                type="number"
+                text="Orçamento convertido"
+                name="converted_budget"
+                placeholder="Orçamento convertido"
+                value={
+                project.budget
+                    ? convertCurrency(project.budget, currency).toFixed(2)
+                    : ''
+                }
+                handleOnChange={handleChange}
+                readOnly
+            />
            <Select 
             name='category_id' 
             text='Selecione a categoria'
