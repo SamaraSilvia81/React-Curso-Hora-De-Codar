@@ -51,7 +51,8 @@ export function Projects(){
             id={project.id}
             name={project.name}
             budget={project.converted_budget}
-            currency={project.currency}
+            currency={project?.currency?.name}
+            convertedBudget={project.converted_budget}
             category={project?.category?.name}
             key={project.id}
             />))}

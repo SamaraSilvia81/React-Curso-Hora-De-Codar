@@ -1,45 +1,45 @@
 {
   "projects": [
     {
-      "name": "Teste01",
       "budget": "1200",
-      "category": {
-        "id": "3",
-        "name": "Design"
+      "currency": {
+        "id": "1",
+        "name": "BRL"
       },
-      "converted_budget": 6000,
+      "converted_budget": 6300,
       "cost": 0,
       "services": [],
       "id": 1
     },
     {
-      "name": "Teste02",
-      "budget": "4500",
-      "category": {
-        "id": "4",
-        "name": "Planejamento"
+      "budget": "1200",
+      "currency": {
+        "id": "2",
+        "name": "USD"
       },
-      "converted_budget": 22500,
+      "converted_budget": 6300,
       "cost": 0,
       "services": [],
       "id": 2
     },
     {
-      "name": "Real Ok",
       "budget": "1200",
+      "currency": {
+        "id": "1",
+        "name": "BRL"
+      },
       "converted_budget": 1200,
       "cost": 0,
       "services": [],
       "id": 3
     },
     {
-      "name": "Dolar 2²2",
       "budget": "1200",
-      "category": {
-        "id": "1",
-        "name": "Infraestrutura"
+      "currency": {
+        "id": "2",
+        "name": "USD"
       },
-      "converted_budget": 6300,
+      "converted_budget": 1200,
       "cost": 0,
       "services": [],
       "id": 4
@@ -60,6 +60,10 @@
     },
     {
       "budget": "1200",
+      "currency": {
+        "id": "2",
+        "name": "USD"
+      },
       "converted_budget": 6300,
       "cost": 0,
       "services": [],
@@ -67,25 +71,35 @@
     },
     {
       "budget": "1200",
+      "currency": {
+        "id": "1",
+        "name": "BRL"
+      },
       "converted_budget": 1200,
       "cost": 0,
       "services": [],
       "id": 8
     },
     {
-      "name": "Teste Beta 2",
       "budget": "1200",
-      "converted_budget": 6300,
+      "converted_budget": 1200,
       "cost": 0,
       "services": [],
       "id": 9
     },
     {
       "budget": "1200",
-      "converted_budget": 1200,
+      "converted_budget": 6300,
       "cost": 0,
       "services": [],
       "id": 10
+    },
+    {
+      "budget": "1200",
+      "converted_budget": 6300,
+      "cost": 0,
+      "services": [],
+      "id": 11
     }
   ],
   "categories": [
@@ -104,6 +118,16 @@
     {
       "id": 4,
       "name": "Planejamento"
+    }
+  ],
+  "currencies": [
+    {
+      "id": 1,
+      "name": "BRL"
+    },
+    {
+      "id": 2,
+      "name": "USD"
     }
   ]
 }

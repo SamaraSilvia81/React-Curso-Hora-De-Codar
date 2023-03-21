@@ -2396,3 +2396,89 @@ export function ProjectCard({id,name,budget,category,handleRemove}){
 }
 
 ```
+
+## Conversão de Orçamento 
+
+É interessante que o usuário tenha escolha na hora de selecionar o seu orçamento, podendo escolher entre dados reais ou configurados na moeda dólar.
+
+Para implementarmos isso no nosso código precisaremos de 4 funções e dois estados adicionais.
+
+As funções `handleChange`, `handleCurrencyChange`, e `handleBudgetAndCurrencyChange` são responsáveis por manipular o estado do componente `ProjectForm `de acordo com as interações do usuário.
+
+Antes de começarmos a codar, é importnate saber que a lógica que se seguirá nessa parte será da seguinte forma, tudo dentro do arquivo `ProjectForm.jsx`:
+
+- Teremos um input de entrada de orçamento, ou seja, onde o usuário informará o preço do seu projeto;
+- Teremos um select para que o usuário decida qual moeda vai usar. Esse select, inicialmente, terá como valor padrão na moeda real;
+- Por fim, teremos um último input que servirá apenas para exibir os valores convertidos, a depender da moeda selecionada.
+
+Vamos primeiro criar os nossos estados:
+
+```jsx
+
+ // Conversão de Moeda
+const [currency, setCurrency] = useState("BRL"); // Estado da moeda
+const [convertedBudget, setConvertedBudget] = useState(projectData ? projectData.converted_budget : null); // Estado do valor convertido 
+
+```
+
+- `handleChange`: é acionada sempre que o usuário digita ou seleciona algo em um dos campos de entrada (Input ou Select) do formulário. 
+
+```jsx
+
+const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProject({ ...project, [name]: value });
+    handleBudgetAndCurrencyChange(value, currency);
+    console.log(project)
+}
+
+```
+
+Ela recebe o evento (e) como argumento, extrai o nome do campo que foi alterado (name) e o novo valor (value) do campo, atualiza o estado do projeto (project) com essas informações usando o operador spread (...), e então chama a função `handleBudgetAndCurrencyChange` para atualizar o estado do orçamento convertido (convertedBudget) de forma automática no próprio input, com base no novo valor do orçamento (project.budget) e na moeda selecionada (currency).
+
+- `convertedCurrency`: É um método voltado para a conversão propriamente dita dos vlaores que iremos digitar no nosso input.
+
+```jsx
+
+const convertCurrency = (value, currency) => {
+const conversionRate = currency === 'BRL' ? 1.0 : 5.25; // exemplo de taxa de conversão
+return parseFloat(value) * conversionRate;
+};
+
+```
+
+- `handleCurrencyChange`: é acionada quando o usuário seleciona uma nova moeda no menu suspenso de seleção de moeda. 
+
+```jsx
+
+    const handleCurrencyChange = (e) => {
+    const newCurrency = e.target.value;
+    setCurrency(newCurrency);
+    handleBudgetAndCurrencyChange(project.budget, newCurrency);
+};
+
+```
+
+Ela recebe o evento (e) como argumento, extrai o novo valor selecionado (newCurrency), atualiza o estado da moeda (currency) com esse novo valor, e então chama a função `convertCurrency` para atualizar o estado do orçamento convertido (convertedBudget) com base no valor atual do orçamento (project.budget) e na nova moeda selecionada (newCurrency).
+
+- `handleBudgetAndCurrencyChange`: É uma combinação das duas funções acima. Ela é acionada sempre que o usuário digita algo no campo de entrada de orçamento (budget) ou seleciona uma nova moeda no menu suspenso de seleção de moeda. 
+
+```jsx
+
+const handleBudgetAndCurrencyChange = (budget, currency) => {
+    const newConvertedBudget = convertCurrency(budget, currency);
+    setConvertedBudget(newConvertedBudget);
+    setProject({ ...project, budget: budget, converted_budget: newConvertedBudget });
+};
+
+```
+
+Ela recebe o evento (e) como argumento, extrai o nome do campo que foi alterado (name) e o novo valor (value) do campo, atualiza o estado do projeto (project) com essas informações usando o operador spread (...), atualiza o estado da moeda (currency) com a nova moeda selecionada (newCurrency), e então chama a função `convertCurrency` para atualizar o estado do orçamento convertido (convertedBudget) com base no novo valor do orçamento (budgetValue) e na nova moeda selecionada (newCurrency).
+
+- **Diferença entre as funções** 
+
+As funções `handleChange` e `handleCurrencyChange` são utilizadas separadamente para atualizar os estados project e currency quando o usuário altera os valores dos inputs de nome do projeto e de moeda, respectivamente. 
+
+Já a função `handleBudgetAndCurrencyChange` é utilizada para atualizar os estados project e convertedBudget quando o usuário altera o valor do input de orçamento, ou quando o usuário altera a moeda selecionada.
+
+Cada uma dessas funções tem uma responsabilidade específica e é utilizada em um contexto diferente dentro do código. Isso torna o código mais organizado e mais fácil de entender e manter. Se utilizássemos somente a função `handleBudgetAndCurrencyChange`, o código poderia se tornar mais difícil de entender e manter, principalmente se houver necessidade de alterações futuras.

@@ -6,7 +6,7 @@ import {Link} from 'react-router-dom'
 export function ProjectCard({id,currency,name,budget,convertedBudget, category,handleRemove}){
 
     const currencySymbol = currency === 'BRL' ? 'R$' : '$';
-    
+
     return (
        <div className={styles.project_card}>
         <h4>{name}</h4>
@@ -18,6 +18,9 @@ export function ProjectCard({id,currency,name,budget,convertedBudget, category,h
         </p>
         <p className={styles.category_text}>
             <span className={`${styles[category?.toLowerCase()]}`}></span> {category}
+        </p>
+        <p>
+            <span className={`${styles[currency?.toLowerCase()]}`}></span> {currency}
         </p>
         <div className={styles.project_card_actions}>
             <Link to='/'>
