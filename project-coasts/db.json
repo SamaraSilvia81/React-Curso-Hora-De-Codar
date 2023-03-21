@@ -100,6 +100,71 @@
       "cost": 0,
       "services": [],
       "id": 11
+    },
+    {
+      "budget": "1200",
+      "converted_budget": 1200,
+      "cost": 0,
+      "services": [],
+      "id": 12
+    },
+    {
+      "budget": "1200",
+      "converted_budget": 1200,
+      "cost": 0,
+      "services": [],
+      "id": 13
+    },
+    {
+      "budget": "1200",
+      "converted_budget": 6300,
+      "cost": 0,
+      "services": [],
+      "id": 14
+    },
+    {
+      "budget": "1200",
+      "currency": {
+        "id": "1",
+        "name": "BRL"
+      },
+      "converted_budget": 1200,
+      "cost": 0,
+      "services": [],
+      "id": 15
+    },
+    {
+      "budget": "1200",
+      "currency": {
+        "id": "2",
+        "name": "USD"
+      },
+      "converted_budget": 6300,
+      "cost": 0,
+      "services": [],
+      "id": 16
+    },
+    {
+      "budget": "1200",
+      "currency": {
+        "id": "2",
+        "name": "USD"
+      },
+      "converted_budget": 6300,
+      "cost": 0,
+      "services": [],
+      "id": 17
+    },
+    {
+      "budget": "1200",
+      "currency": {
+        "id": "1",
+        "name": "BRL"
+      },
+      "converted_budget": 1200,
+      "cost": 0,
+      "services": [],
+      "id": 18
     }
   ],
   "categories": [

@@ -15,7 +15,9 @@ export function ProjectForm({btnText, handleSubmit, projectData}){
     const [currency, setCurrency] = useState("BRL");
     const [convertedBudget, setConvertedBudget] = useState(projectData ? projectData.converted_budget : null);
 
-    //
+    const [originalBudget, setOriginalBudget] = useState(
+      projectData ? projectData.budget : null
+    );
     const [currencies, setCurrencies] = useState([])
 
     useEffect(() => {
@@ -55,10 +57,10 @@ export function ProjectForm({btnText, handleSubmit, projectData}){
       const handleChange = (e) => {
         const { name, value } = e.target;
         setProject({ ...project, [name]: value });
-        const newConvertedBudget = convertCurrency(value, currency);
+        const newConvertedBudget = convertCurrency(project.budget, currency);
         setConvertedBudget(newConvertedBudget);
         console.log(project)
-    }
+        }
 
    {/* const handleChange = (e) => {
         const { name, value } = e.target;
@@ -81,13 +83,33 @@ export function ProjectForm({btnText, handleSubmit, projectData}){
     const handleCurrency = (e) => {
         const newCurrency = e.target.value;
         setCurrency(newCurrency);
+
+        {/*const fromCurrency = project.currency ? project.currency.id : "BRL";
+        const toCurrency = newCurrency === "BRL" ? "REAL" : "USD";
+        let newConvertedBudget = convertedBudget;
+
+        if (fromCurrency === "USD" && newCurrency === "BRL") {
+          newConvertedBudget = convertedBudget / 5.25;
+        } else if (fromCurrency === "BRL" && newCurrency === "USD") {
+          newConvertedBudget = convertedBudget * 5.25;
+        }
+
+        setConvertedBudget(newConvertedBudget);
+
+        setProject({
+          ...project,
+          currency: {
+            id: newCurrency,
+            name: e.target.options[e.target.selectedIndex].text,
+          },
+        });*/}
       
         const fromCurrency = project.currency ? project.currency.id : "BRL";
         const toCurrency = newCurrency === "BRL" ? "REAL" : "USD";
-        
+
         const newConvertedBudget = convertCurrency(project.budget, fromCurrency, toCurrency);
         setConvertedBudget(newConvertedBudget);
-      
+
         setProject({
           ...project,
           currency: {
@@ -95,7 +117,16 @@ export function ProjectForm({btnText, handleSubmit, projectData}){
             name: e.target.options[e.target.selectedIndex].text,
           },
         });
-      };      
+
+        if (newCurrency !== fromCurrency) {
+          const originalBudgetValue = convertToOriginalCurrency(
+            convertedBudget,
+            newCurrency,
+            fromCurrency
+          );
+          setOriginalBudget(originalBudgetValue);
+      };     
+    } 
 
     const handleBudgetChange = (e) => {
         const budgetValue = e.target.value;
@@ -105,19 +136,20 @@ export function ProjectForm({btnText, handleSubmit, projectData}){
         });
         const newConvertedBudget = convertCurrency(budgetValue, currency);
         setConvertedBudget(newConvertedBudget);
-        };
+    };
     
     const handleCurrencyChange = (e) => {
-        //setCurrency(e.target.value);
-        const newCurrency = e.target.value;
-        setCurrency(newCurrency);
-        const newConvertedBudget = convertCurrency(project.budget, newCurrency);
-        setConvertedBudget(newConvertedBudget);
+      const newCurrency = e.target.value;
+      setCurrency(newCurrency);
+      const newConvertedBudget = currency === "USD" && newCurrency === "BRL" ?
+      convertedBudget * 5.18 : currency === "BRL" && newCurrency === "USD" ?
+      convertedBudget / 5.18 : convertedBudget;
+      setConvertedBudget(newConvertedBudget);
     };
     
     const convertCurrency = (value, currency) => {
-    const conversionRate = currency === 'BRL' ? 1.0 : 5.25; // exemplo de taxa de conversão
-    return parseFloat(value) * conversionRate;
+      const conversionRate = currency === 'BRL' ? 1.0 : 5.18; // exemplo de taxa de conversão
+      return parseFloat(value) * conversionRate;
     };
     
     return (
@@ -149,7 +181,7 @@ export function ProjectForm({btnText, handleSubmit, projectData}){
                 name='currency' 
                 text='Selecione a moeda'
                 options={currencies}
-                handleOnChange={handleCurrencyChange}
+                handleOnChange={handleCurrency}
                 value={project.currency ? project.currency.id: ''}
            />
             <Input
@@ -177,4 +209,5 @@ export function ProjectForm({btnText, handleSubmit, projectData}){
            <SubmitButton text={btnText} handleSubmit={handleSubmit}/>
         </form>
     )
+      
 }
