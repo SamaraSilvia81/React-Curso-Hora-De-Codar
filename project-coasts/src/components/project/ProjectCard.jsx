@@ -14,7 +14,7 @@ export function ProjectCard({id,currency,name,budget,convertedBudget, category,h
         {currency === 'BRL' ? <span>R$</span> :  <span>$</span>} { currency === "USD" ? convertedBudget.toFixed(2) : budget}
         {currency === 'BRL' ? <span>R$ {budget}</span> : currency === 'USD' ? <span>${convertedBudget.toFixed(2)}</span> : null}
   */}
-             <span>Orçamento:</span> {currencySymbol} { currency === "USD" ? convertedBudget.toFixed(2) : budget}
+             <span>Orçamento:</span> {currencySymbol} { currency === "USD" ? convertedBudget : budget}
         </p>
         <p className={styles.category_text}>
             <span className={`${styles[category?.toLowerCase()]}`}></span> {category}

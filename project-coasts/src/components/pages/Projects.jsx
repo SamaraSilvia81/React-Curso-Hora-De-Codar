@@ -50,6 +50,7 @@ export function Projects(){
             projects.map((project) => <ProjectCard 
             id={project.id}
             name={project.name}
+            //budget={project.budget}
             budget={project.converted_budget}
             currency={project?.currency?.name}
             convertedBudget={project.converted_budget}

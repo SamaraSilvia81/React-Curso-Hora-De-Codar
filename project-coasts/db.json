@@ -165,6 +165,189 @@
       "cost": 0,
       "services": [],
       "id": 18
+    },
+    {
+      "budget": "1200",
+      "converted_budget": null,
+      "cost": 0,
+      "services": [],
+      "id": 19
+    },
+    {
+      "category": {
+        "id": "1",
+        "name": "Infraestrutura"
+      },
+      "cost": 0,
+      "services": [],
+      "id": 20
+    },
+    {
+      "currency": {
+        "id": "1",
+        "name": "BRL"
+      },
+      "category": {
+        "id": "1",
+        "name": "Infraestrutura"
+      },
+      "cost": 0,
+      "services": [],
+      "id": 21
+    },
+    {
+      "budget": "1200",
+      "currency": {
+        "id": "1",
+        "name": "BRL"
+      },
+      "category": {
+        "id": "1",
+        "name": "Infraestrutura"
+      },
+      "cost": 0,
+      "services": [],
+      "id": 22
+    },
+    {
+      "budget": "1200",
+      "converted_budget": null,
+      "cost": 0,
+      "services": [],
+      "id": 23
+    },
+    {
+      "budget": "1200",
+      "converted_budget": null,
+      "cost": 0,
+      "services": [],
+      "id": 24
+    },
+    {
+      "budget": "1199",
+      "cost": 0,
+      "services": [],
+      "id": 25
+    },
+    {
+      "budget": "1200",
+      "name": "Tsta Alfa",
+      "category": {
+        "id": "1",
+        "name": "Infraestrutura"
+      },
+      "cost": 0,
+      "services": [],
+      "id": 26
+    },
+    {
+      "budget": "1200",
+      "cost": 0,
+      "services": [],
+      "id": 27
+    },
+    {
+      "budget": "1200",
+      "cost": 0,
+      "services": [],
+      "id": 28
+    },
+    {
+      "currency": {
+        "id": "1",
+        "name": "BRL"
+      },
+      "name": "Teste de Moeda 01",
+      "budget": "1200",
+      "category": {
+        "id": "1",
+        "name": "Infraestrutura"
+      },
+      "cost": 0,
+      "services": [],
+      "id": 29
+    },
+    {
+      "budget": "1200",
+      "currency": {
+        "id": "1",
+        "name": "BRL"
+      },
+      "cost": 0,
+      "services": [],
+      "id": 30
+    },
+    {
+      "budget": "1200",
+      "currency": {
+        "id": "2",
+        "name": "USD"
+      },
+      "cost": 0,
+      "services": [],
+      "id": 31
+    },
+    {
+      "budget": "1200",
+      "currency": {
+        "id": "1",
+        "name": "BRL"
+      },
+      "cost": 0,
+      "services": [],
+      "id": 32
+    },
+    {
+      "budget": "1200",
+      "currency": {
+        "id": "2",
+        "name": "USD"
+      },
+      "cost": 0,
+      "services": [],
+      "id": 33
+    },
+    {
+      "name": "Teste Alfa 02",
+      "budget": "1200",
+      "category": {
+        "id": "1",
+        "name": "Infraestrutura"
+      },
+      "cost": 0,
+      "services": [],
+      "id": 34
+    },
+    {
+      "budget": "1200",
+      "currency": {
+        "id": "2",
+        "name": "USD"
+      },
+      "cost": 0,
+      "services": [],
+      "id": 35
+    },
+    {
+      "budget": "1200",
+      "currency": {
+        "id": "2",
+        "name": "USD"
+      },
+      "cost": 0,
+      "services": [],
+      "id": 36
+    },
+    {
+      "budget": "1200",
+      "currency": {
+        "id": "2",
+        "name": "USD"
+      },
+      "converted_budget": null,
+      "cost": 0,
+      "services": [],
+      "id": 37
     }
   ],
   "categories": [
