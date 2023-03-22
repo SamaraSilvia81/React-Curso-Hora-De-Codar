@@ -1,36 +1,199 @@
 {
   "projects": [
     {
+      "name": "V2 - Teste 01",
+      "price": "1200",
       "currency": {
         "id": "1",
         "name": "BRL"
       },
-      "converted_budget": null,
+      "category": {
+        "id": "1",
+        "name": "Infraestrutura"
+      },
+      "converted_price": 1200,
       "cost": 0,
       "services": [],
       "id": 1
     },
     {
-      "budget": "1200",
+      "name": "V2 - Teste 02",
+      "price": "1200",
       "currency": {
-        "id": "1",
-        "name": "BRL"
+        "id": "2",
+        "name": "USD"
       },
-      "converted_budget": 1200,
+      "category": {
+        "id": "2",
+        "name": "Desenvolvimento"
+      },
+      "converted_price": 1200,
       "cost": 0,
       "services": [],
       "id": 2
     },
     {
-      "budget": "1200",
+      "name": "V2 - Teste 03",
+      "price": "1200",
+      "currency": {
+        "id": "2",
+        "name": "USD"
+      },
+      "category": {
+        "id": "3",
+        "name": "Design"
+      },
+      "converted_price": 6228.000000000001,
+      "cost": 0,
+      "services": [],
+      "id": 3
+    },
+    {
+      "name": "V2.5 - Teste 04",
+      "price": "1200",
       "currency": {
         "id": "1",
         "name": "BRL"
       },
-      "converted_budget": 6228.000000000001,
+      "quantity": "10",
+      "category": {
+        "id": "4",
+        "name": "Planejamento"
+      },
+      "time": {
+        "id": "3",
+        "name": "Mês"
+      },
+      "converted_price": 1200,
       "cost": 0,
       "services": [],
-      "id": 3
+      "id": 4
+    },
+    {
+      "name": "V2.5 - Teste 05",
+      "price": "1200",
+      "currency": {
+        "id": "2",
+        "name": "USD"
+      },
+      "quantityCategory": "12",
+      "category": {
+        "id": "2",
+        "name": "Desenvolvimento"
+      },
+      "time": {
+        "id": "2",
+        "name": "Semana"
+      },
+      "quantityTime": "2",
+      "converted_price": 6300,
+      "cost": 0,
+      "services": [],
+      "id": 5
+    },
+    {
+      "name": "V2.5 - Teste 06",
+      "price": "3500",
+      "currency": {
+        "id": "2",
+        "name": "USD"
+      },
+      "quantityCategory": "29",
+      "category": {
+        "id": "4",
+        "name": "Planejamento"
+      },
+      "time": {
+        "id": "2",
+        "name": "Semana"
+      },
+      "quantityTime": "3",
+      "converted_price": 18375,
+      "budgetTotal": null,
+      "cost": 0,
+      "services": [],
+      "id": 6
+    },
+    {
+      "name": "V2.5 - Teste 07",
+      "budget": "",
+      "currency": {
+        "id": "2",
+        "name": "USD"
+      },
+      "converted_budget": null,
+      "qtde": 0,
+      "products": [],
+      "price": "5000",
+      "quantityCategory": "7",
+      "category": {
+        "id": "3",
+        "name": "Design"
+      },
+      "time": {
+        "id": "1",
+        "name": "Dia"
+      },
+      "quantityTime": "9",
+      "converted_price": 26250,
+      "budgetTotal": 63,
+      "cost": 0,
+      "services": [],
+      "id": 7
+    },
+    {
+      "name": "V2.5 - Teste 08",
+      "budget": "",
+      "currency": {
+        "id": "1",
+        "name": "BRL"
+      },
+      "converted_budget": null,
+      "qtde": 0,
+      "products": [],
+      "price": "6789",
+      "quantityCategory": "2",
+      "quantityTime": "5",
+      "category": {
+        "id": "1",
+        "name": "Infraestrutura"
+      },
+      "time": {
+        "id": "1",
+        "name": "Dia"
+      },
+      "converted_price": 35642.25,
+      "budgetTotal": 10,
+      "cost": 0,
+      "services": [],
+      "id": 8
+    },
+    {
+      "name": "V2.5 - Teste 09",
+      "budget": "",
+      "currency": {
+        "id": "2",
+        "name": "USD"
+      },
+      "converted_budget": null,
+      "qtde": 0,
+      "products": [],
+      "price": "4568",
+      "quantityCategory": "4",
+      "category": {
+        "id": "2",
+        "name": "Desenvolvimento"
+      },
+      "time": {
+        "id": "3",
+        "name": "Mês"
+      },
+      "quantityTime": "2",
+      "converted_price": 23982,
+      "budgetTotal": 8,
+      "cost": 0,
+      "services": [],
+      "id": 9
     }
   ],
   "categories": [
@@ -59,6 +222,20 @@
     {
       "id": 2,
       "name": "USD"
+    }
+  ],
+  "time": [
+    {
+      "id": 1,
+      "name": "Dia"
+    },
+    {
+      "id": 2,
+      "name": "Semana"
+    },
+    {
+      "id": 3,
+      "name": "Mês"
     }
   ]
 }

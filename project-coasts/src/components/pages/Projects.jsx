@@ -3,6 +3,7 @@ import { useState, useEffect} from 'react';
 
 import {Message} from '../layout/Message';
 import {Container} from '../layout/Container';
+import {Loadind} from '../layout/Loading';
 import {LinkButton} from '../layout/LinkButton';
 import {ProjectCard} from '../project/ProjectCard';
 
@@ -11,6 +12,7 @@ import styles from './Projects.module.css';
 export function Projects(){
 
     const [projects, setProjects] = useState([]); // estado para salvar os projetos
+    const [removeLoading, setRemoveLoading] = useState(false)
 
     const location = useLocation()
     let message = ''
@@ -23,21 +25,23 @@ export function Projects(){
     // Usamos o useEffect para evitar que loop infinito de requisições
 
     useEffect(() => {
-        fetch("http://localhost:5200/projects",{
-        method: 'GET',
-        headers:{
-            'Content-Type':"application/json"
-        }
-    })
-        .then((res) => res.json())
-        .then((data) => {
-            console.log(data)
-            setProjects(data)  
-        })
-        .catch((e) => console.log(err))  // assim conseguiremos debuggar depois
+        setTimeout(() => {
+            fetch("http://localhost:5200/projects",{
+                method: 'GET',
+                headers:{
+                    'Content-Type':"application/json"
+                }
+            })
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data)
+                setProjects(data) 
+                setRemoveLoading(true) // quando os projetos forem carregados, então ele se remove
+            })
+            .catch((e) => console.log(e))  // assim conseguiremos debuggar depois
+        }, 400)
     },[])  // estaremos controlando um array vazio
 
-    
     return (
        <div className={styles.project_container}>
         <div className={styles.title_container}>
@@ -60,6 +64,13 @@ export function Projects(){
                 currency={project?.currency?.name}
                 category={project?.category?.name}
             />))}
+            {/*If que representa quando os projetos não estão sendo carregados*/}
+            {!removeLoading && <Loadind/>}
+            {/*If quando não existe nenhum projeto*/}
+            {removeLoading && projects.length === 0(
+                <p>Não há projetos cadastrados!</p>
+            )
+            }
        </Container>
        </div>
     )
