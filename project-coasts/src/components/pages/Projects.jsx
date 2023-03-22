@@ -23,7 +23,7 @@ export function Projects(){
     // Usamos o useEffect para evitar que loop infinito de requisições
 
     useEffect(() => {
-        fetch("http://localhost:5000/projects",{
+        fetch("http://localhost:5400/projects",{
         method: 'GET',
         headers:{
             'Content-Type':"application/json"
