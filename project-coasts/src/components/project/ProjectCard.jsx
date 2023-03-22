@@ -7,6 +7,11 @@ export function ProjectCard({id,currency,name,budget,price,convertedPrice, categ
 
     const currencySymbol = currency === 'BRL' ? 'R$' : '$';
 
+    const remove = (e) => {
+        e.preventDefault()
+        handleRemove(id)
+    }
+
     return (
        <div className={styles.project_card}>
         <h4>{name}</h4>
@@ -29,7 +34,7 @@ export function ProjectCard({id,currency,name,budget,price,convertedPrice, categ
             <Link to='/'>
                 <BsPencil/> Editar
             </Link>
-            <button>
+            <button onClick={remove}>
                 <BsFillTrashFill/> Excluir
             </button>
         </div>

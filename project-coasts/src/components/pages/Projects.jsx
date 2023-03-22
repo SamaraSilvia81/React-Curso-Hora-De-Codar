@@ -13,6 +13,7 @@ export function Projects(){
 
     const [projects, setProjects] = useState([]); // estado para salvar os projetos
     const [removeLoading, setRemoveLoading] = useState(false)
+    const [projectMessage, setProjectMessage] = useState('') // como a message vem pelo redirect, e não temos nada cadastrado aqui vamos criar um state.
 
     const location = useLocation()
     let message = ''
@@ -23,7 +24,6 @@ export function Projects(){
 
     // Para buscar todos os projetos
     // Usamos o useEffect para evitar que loop infinito de requisições
-
     useEffect(() => {
         setTimeout(() => {
             fetch("http://localhost:5200/projects",{
@@ -42,6 +42,22 @@ export function Projects(){
         }, 400)
     },[])  // estaremos controlando um array vazio
 
+    // Método para remover o projeto  + fecth
+    const removeProject = (id) => {
+        fetch(`http://localhost:5200/projects/${id}`,{
+            method: 'DELETE',
+            headers: {
+                'Content-Type':'application/json'
+            },
+        })
+        .then((res) => res.json())
+        .then(data => {
+            setProjects(projects.filter((project) => project.id !== id))
+            setProjectMessage("Projeto removido com sucesso!")
+        })
+        .catch((e) => console.log(e))
+    }
+
     return (
        <div className={styles.project_container}>
         <div className={styles.title_container}>
@@ -49,6 +65,7 @@ export function Projects(){
             <LinkButton to='/newproject' text='Novo Produto'/>
         </div>
         { message && <Message type='sucess' msg={message} />}
+        { projectMessage && <Message type='sucess' msg={projectMessage} />}
        <Container customClass='start'>
         { projects.length > 0 && (
             projects.map((project) => <ProjectCard
@@ -63,11 +80,12 @@ export function Projects(){
                 convertedPrice={project.converted_price}
                 currency={project?.currency?.name}
                 category={project?.category?.name}
+                handleRemove={removeProject}
             />))}
             {/*If que representa quando os projetos não estão sendo carregados*/}
             {!removeLoading && <Loadind/>}
             {/*If quando não existe nenhum projeto*/}
-            {removeLoading && projects.length === 0(
+            {removeLoading && projects.length === 0 && (
                 <p>Não há projetos cadastrados!</p>
             )
             }
