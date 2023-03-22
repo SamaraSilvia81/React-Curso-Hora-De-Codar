@@ -5,5 +5,5 @@
 .title_container{
     display: flex; /* cada elemento um do lado do outro */
     justify-content: space-between; /* espaçamento lateral igual entre os elementos*/
-    margin-bottom: 2m;
+    margin-bottom: 2em;
 }

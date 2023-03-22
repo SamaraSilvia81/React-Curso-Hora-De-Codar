@@ -3,24 +3,27 @@ import styles from './ProjectCard.module.css';
 
 import {Link} from 'react-router-dom'
 
-export function ProjectCard({id,currency,name,budget,convertedBudget, category,handleRemove}){
+export function ProjectCard({id,currency,name,budget,price,convertedPrice, category,quantityCategory,quantityTime,time, handleRemove}){
 
     const currencySymbol = currency === 'BRL' ? 'R$' : '$';
 
     return (
        <div className={styles.project_card}>
         <h4>{name}</h4>
-        <p> {/*
-        {currency === 'BRL' ? <span>R$</span> :  <span>$</span>} { currency === "USD" ? convertedBudget.toFixed(2) : budget}
-        {currency === 'BRL' ? <span>R$ {budget}</span> : currency === 'USD' ? <span>${convertedBudget.toFixed(2)}</span> : null}
-  */}
-             <span>Orçamento:</span> {currencySymbol} { currency === "USD" ? convertedBudget : budget}
-        </p>
-        <p className={styles.category_text}>
-            <span className={`${styles[category?.toLowerCase()]}`}></span> {category}
+        <p> 
+            <span>Preço:</span> {currencySymbol} { currency === "USD" ? convertedPrice : price}
         </p>
         <p>
-            <span className={`${styles[currency?.toLowerCase()]}`}></span> {currency}
+            <span className={`${styles[currency?.toLowerCase()]}`}>Moeda:</span> {currency}
+        </p>
+        <p>
+            <span>Orçamento Total:</span> {budget}
+        </p>
+        <p className={styles.category_text}>
+            <span className={`${styles[time?.toLowerCase()]}`}></span> {time} - {quantityTime}
+        </p>
+        <p className={styles.category_text}>
+            <span className={`${styles[category?.toLowerCase()]}`}></span> {category} - {quantityCategory}
         </p>
         <div className={styles.project_card_actions}>
             <Link to='/'>

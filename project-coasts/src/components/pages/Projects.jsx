@@ -23,7 +23,7 @@ export function Projects(){
     // Usamos o useEffect para evitar que loop infinito de requisições
 
     useEffect(() => {
-        fetch("http://localhost:5400/projects",{
+        fetch("http://localhost:5200/projects",{
         method: 'GET',
         headers:{
             'Content-Type':"application/json"
@@ -41,21 +41,24 @@ export function Projects(){
     return (
        <div className={styles.project_container}>
         <div className={styles.title_container}>
-            <h1>Meus Projetos</h1>
-            <LinkButton to='/newproject' text='Novo Projeto'/>
+            <h1>Meus Produtos</h1>
+            <LinkButton to='/newproject' text='Novo Produto'/>
         </div>
         { message && <Message type='sucess' msg={message} />}
        <Container customClass='start'>
         { projects.length > 0 && (
-            projects.map((project) => <ProjectCard 
-            id={project.id}
-            name={project.name}
-            //budget={project.budget}
-            budget={project.converted_budget}
-            currency={project?.currency?.name}
-            convertedBudget={project.converted_budget}
-            category={project?.category?.name}
-            key={project.id}
+            projects.map((project) => <ProjectCard
+                key={project.id} 
+                id={project.id}
+                name={project.name}
+                budget={project.budgetTotal}
+                time={project?.time?.name}
+                quantityTime={project.quantityTime}
+                quantityCategory={project.quantityCategory}
+                price={project.converted_price}
+                convertedPrice={project.converted_price}
+                currency={project?.currency?.name}
+                category={project?.category?.name}
             />))}
        </Container>
        </div>

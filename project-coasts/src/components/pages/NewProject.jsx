@@ -12,7 +12,7 @@ export function NewProject(){
         project.cost = 0
         project.services = []
 
-        fetch('http://localhost:5400/projects',{
+        fetch('http://localhost:5200/projects',{
             method: 'POST',
             headers:{
                 'Content-Type':"application/json"
@@ -30,8 +30,8 @@ export function NewProject(){
 
     return(
         <div className={styles.newproject_container}>
-            <h1>Criar Projeto</h1>
-            <p>Crie seu projeto para depois adicionais os serviços</p>
+            <h1>Cadastrar Produto</h1>
+            <p>Crie seu produto para depois adicionais os serviços</p>
             <ProjectForm handleSubmit={createPost} btnText="Criar projeto"/>
         </div>
     )
