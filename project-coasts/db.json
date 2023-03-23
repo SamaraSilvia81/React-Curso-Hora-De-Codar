@@ -1,7 +1,7 @@
 {
   "projects": [
     {
-      "name": "V2 - Teste 01",
+      "name": "V2 - Teste 01 (Atualizado)",
       "price": "1200",
       "currency": {
         "id": "1",
@@ -14,10 +14,13 @@
       "converted_price": 1200,
       "cost": 0,
       "services": [],
-      "id": 1
+      "id": 1,
+      "quantityCategory": "21",
+      "quantityTime": "3",
+      "budgetTotal": 63
     },
     {
-      "name": "V2 - Teste 03",
+      "name": "V2 - Teste 03 (Atualizado)",
       "price": "1200",
       "currency": {
         "id": "2",
@@ -30,7 +33,10 @@
       "converted_price": 6228.000000000001,
       "cost": 0,
       "services": [],
-      "id": 3
+      "id": 3,
+      "quantityCategory": "4",
+      "quantityTime": "2",
+      "budgetTotal": 8
     },
     {
       "name": "V2.5 - Teste 08",

@@ -5,6 +5,8 @@ import { useState, useEffect } from 'react'
 
 import {Loading} from '../layout/Loading'
 import {Container} from '../layout/Container'
+import {Message} from '../layout/Message'
+import {ProjectForm} from '../project/ProjectForm'
 
 export function Project(){
 
@@ -16,6 +18,11 @@ export function Project(){
 
     // State para mostrar o nosso projeto
     const [showProjectForm, setShowProjectForm] = useState(false)
+
+    // Estado que representa as mensagens
+    const [message, setMessage] = useState()
+    // Estado que representa o tipo da mensagem
+    const [typeMessage, setTypeMessage] = useState()
 
     // Chamar o projeto do id
     useEffect(()=> {
@@ -40,13 +47,44 @@ export function Project(){
         setShowProjectForm(!showProjectForm)
     }
 
+    const editPost = (project) => {
+        
+        // Só assim ele envia esses dados para rota
+        console.log(project)
+
+        // budget validation
+        if(!project.budget < project.cost){
+            setMessage("O orçamento não pode ser menor que o custo do projeto!!")
+            setTypeMessage("error")
+            return false // para tudo e não atualiza o projeto
+        }
+
+        fetch(`http://localhost:5200/projects/${project.id}`,{
+            method: 'PATCH', // Alterar só o que foi mudado
+            headers:{
+                'Content-Type':"application/json"
+            },
+            body: JSON.stringify(project)
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            setProject(data);
+            setShowProjectForm(!showProjectForm)
+            setMessage("Projeto atualizado com sucesso!")
+            setTypeMessage("sucess")
+        })
+        .catch((e) => console.log(e))
+    }
+
     const currencySymbol = project.currency === 'BRL' ? 'R$' : '$';
+    //{project.currency.name}
 
     return(
         <>
             {project.name ? (
                <div className={styles.project_details}>
                 <Container customClass="column">
+                    {message && <Message type={typeMessage} msg={message}/>}
                     <div className={styles.details_container}>
                         <h1>{project.name}</h1>
                         {/* Quando clicar ou vai para a página de editar ou de fechar */}
@@ -60,12 +98,15 @@ export function Project(){
                                     <span>Categoria:</span> {project.category.name}
                                 </p>
                                 <p>
-                                    <span>Preço:</span> {currencySymbol} { project.currency === "USD" ? project.convertedPrice : project.price}
+                                    <span>Cost:</span> {currencySymbol} {project.cost}
+                                </p>
+                                <p>
+                                    <span>Orçamento Total:</span> {currencySymbol} {project.budgetTotal}
                                 </p>
                             </div>
                         ) : (
                             <div className={styles.project_info}>
-                                <p>detalhes do projeto</p>
+                                <ProjectForm handleSubmit={editPost} btnText="Concluir Edição" projectData={project}/>
                             </div>
                         )}
                     </div>
