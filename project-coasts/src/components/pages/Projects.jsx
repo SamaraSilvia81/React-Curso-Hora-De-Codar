@@ -3,7 +3,7 @@ import { useState, useEffect} from 'react';
 
 import {Message} from '../layout/Message';
 import {Container} from '../layout/Container';
-import {Loadind} from '../layout/Loading';
+import {Loading} from '../layout/Loading';
 import {LinkButton} from '../layout/LinkButton';
 import {ProjectCard} from '../project/ProjectCard';
 
@@ -83,7 +83,7 @@ export function Projects(){
                 handleRemove={removeProject}
             />))}
             {/*If que representa quando os projetos não estão sendo carregados*/}
-            {!removeLoading && <Loadind/>}
+            {!removeLoading && <Loading/>}
             {/*If quando não existe nenhum projeto*/}
             {removeLoading && projects.length === 0 && (
                 <p>Não há projetos cadastrados!</p>

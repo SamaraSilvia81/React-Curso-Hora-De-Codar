@@ -31,7 +31,7 @@ export function ProjectCard({id,currency,name,budget,price,convertedPrice, categ
             <span className={`${styles[category?.toLowerCase()]}`}></span> {category} - {quantityCategory}
         </p>
         <div className={styles.project_card_actions}>
-            <Link to='/'>
+            <Link to={`/project/${id}`}>
                 <BsPencil/> Editar
             </Link>
             <button onClick={remove}>

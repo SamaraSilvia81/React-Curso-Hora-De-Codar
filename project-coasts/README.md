@@ -2482,3 +2482,4 @@ As funções `handleChange` e `handleCurrencyChange` são utilizadas separadamen
 Já a função `handleBudgetAndCurrencyChange` é utilizada para atualizar os estados project e convertedBudget quando o usuário altera o valor do input de orçamento, ou quando o usuário altera a moeda selecionada.
 
 Cada uma dessas funções tem uma responsabilidade específica e é utilizada em um contexto diferente dentro do código. Isso torna o código mais organizado e mais fácil de entender e manter. Se utilizássemos somente a função `handleBudgetAndCurrencyChange`, o código poderia se tornar mais difícil de entender e manter, principalmente se houver necessidade de alterações futuras.
+
